@@ -34,4 +34,13 @@ defmodule CardTest do
   test "An off suit trump card wins" do
     assert !wins?(new(:ace, :spades), new(:nine, :hearts), :hearts)
   end
+
+  test "Deal 4 hands" do
+    assert Enum.count(hands()) == 4
+  end
+
+  test "Each hand has 12 cards" do
+    hands()
+    |> Enum.each(fn hand -> assert Enum.count(hand) == 12 end)
+  end
 end
