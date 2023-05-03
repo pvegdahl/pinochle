@@ -10,4 +10,10 @@ defmodule Pinochle.Card do
   def new(rank, suit), do: %Pinochle.Card{rank: rank, suit: suit}
 
   @type t :: %__MODULE__{rank: rank(), suit: suit()}
+
+  @spec ranks() :: [rank()]
+  def ranks(), do: [:nine, :jack, :queen, :king, :ten, :ace]
+
+  @spec suits() :: [suit()]
+  def suits(), do: [:diamonds, :clubs, :hearts, :spades]
 end
