@@ -32,6 +32,9 @@ defmodule Pinochle.Card do
   @spec rank_index(rank :: rank()) :: integer
   def rank_index(rank), do: Enum.find_index(ranks(), fn r -> r == rank end)
 
+  @spec deck() :: [Pinochle.Card.t(), ...]
+  def deck(), do: List.duplicate(new(:jack, :diamonds), 48)
+
   @spec hands() :: [[Pinochle.Card.t(), ...], ...]
   def hands() do
     new(:queen, :hearts)

@@ -39,6 +39,10 @@ defmodule CardTest do
     assert Enum.count(hands()) == 4
   end
 
+  test "Deck has 48 cards" do
+    assert Enum.count(deck()) == 48
+  end
+
   test "Each hand has 12 cards" do
     hands()
     |> Enum.each(fn hand -> assert Enum.count(hand) == 12 end)
