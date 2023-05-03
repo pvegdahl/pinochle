@@ -14,4 +14,9 @@ defmodule CardTest do
   test "Get all suits" do
     assert suits() == [:diamonds, :clubs, :hearts, :spades]
   end
+
+  test "First card wins if they are the same" do
+    card = new(:ace, :clubs)
+    assert wins?(card, card)
+  end
 end
