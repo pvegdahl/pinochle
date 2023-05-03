@@ -18,5 +18,5 @@ defmodule Pinochle.Card do
   def suits(), do: [:diamonds, :clubs, :hearts, :spades]
 
   @spec wins?(first :: Pinochle.Card.t(), second :: Pinochle.Card.t()) :: boolean()
-  def wins?(_first, _second), do: true
+  def wins?(first, second), do: first == second
 end

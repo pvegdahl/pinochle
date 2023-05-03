@@ -16,7 +16,10 @@ defmodule CardTest do
   end
 
   test "First card wins if they are the same" do
-    card = new(:ace, :clubs)
-    assert wins?(card, card)
+    assert wins?(new(:ace, :clubs), new(:ace, :clubs))
+  end
+
+  test "First card loses if it is lower in the same suit" do
+    assert !wins?(new(:king, :clubs), new(:ace, :clubs))
   end
 end
