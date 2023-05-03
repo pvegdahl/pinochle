@@ -30,4 +30,8 @@ defmodule CardTest do
   test "First card wins if suits do not match" do
     assert wins?(new(:nine, :diamonds), new(:ten, :clubs))
   end
+
+  test "An off suit trump card wins" do
+    assert !wins?(new(:ace, :spades), new(:nine, :hearts), :hearts)
+  end
 end

@@ -17,14 +17,17 @@ defmodule Pinochle.Card do
   @spec suits() :: [suit()]
   def suits(), do: [:diamonds, :clubs, :hearts, :spades]
 
-  @spec wins?(first :: Pinochle.Card.t(), second :: Pinochle.Card.t()) :: boolean()
-  def wins?(%Pinochle.Card{rank: first_rank, suit: suit}, %Pinochle.Card{rank: second_rank, suit: suit}) do
+  @spec wins?(first :: Pinochle.Card.t(), second :: Pinochle.Card.t(), trump :: suit() | nil) :: boolean()
+  def wins?(first, second, trump \\ nil)
+  def wins?(%Pinochle.Card{rank: first_rank, suit: suit}, %Pinochle.Card{rank: second_rank, suit: suit}, _trump) do
     rank_index_0 = rank_index(first_rank)
     rank_index_1 = rank_index(second_rank)
     rank_index_0 >= rank_index_1
   end
 
-  def wins?(_first, _second), do: true
+  def wins?(_first, %Pinochle.Card{suit: trump}, trump), do: false
+
+  def wins?(_first, _second, _trump), do: true
 
   @spec rank_index(rank :: rank()) :: integer
   def rank_index(rank) do
