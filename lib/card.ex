@@ -18,5 +18,16 @@ defmodule Pinochle.Card do
   def suits(), do: [:diamonds, :clubs, :hearts, :spades]
 
   @spec wins?(first :: Pinochle.Card.t(), second :: Pinochle.Card.t()) :: boolean()
-  def wins?(first, second), do: first == second
+  def wins?(%Pinochle.Card{rank: first_rank, suit: suit}, %Pinochle.Card{rank: second_rank, suit: suit}) do
+    rank_index_0 = rank_index(first_rank)
+    rank_index_1 = rank_index(second_rank)
+    rank_index_0 >= rank_index_1
+  end
+
+  def wins?(_first, _second), do: true
+
+  @spec rank_index(rank :: rank()) :: integer
+  def rank_index(rank) do
+    Enum.find_index(ranks(), fn r -> r == rank end)
+  end
 end
