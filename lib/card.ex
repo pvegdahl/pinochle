@@ -21,13 +21,9 @@ defmodule Pinochle.Card do
           boolean()
   def wins?(first, second, trump \\ nil)
 
-  def wins?(
-        %Pinochle.Card{rank: first_rank, suit: suit},
-        %Pinochle.Card{rank: second_rank, suit: suit},
-        _trump
-      ) do
-    rank_index_0 = rank_index(first_rank)
-    rank_index_1 = rank_index(second_rank)
+  def wins?(%Pinochle.Card{rank: rank_0, suit: suit}, %Pinochle.Card{rank: rank_1, suit: suit}, _trump) do
+    rank_index_0 = rank_index(rank_0)
+    rank_index_1 = rank_index(rank_1)
     rank_index_0 >= rank_index_1
   end
 
