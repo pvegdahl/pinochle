@@ -21,7 +21,7 @@ defmodule Pinochle.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-        {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]
   end
 end
