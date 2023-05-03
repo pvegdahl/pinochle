@@ -22,9 +22,7 @@ defmodule Pinochle.Card do
   def wins?(first, second, trump \\ nil)
 
   def wins?(%Pinochle.Card{rank: rank_0, suit: suit}, %Pinochle.Card{rank: rank_1, suit: suit}, _trump) do
-    rank_index_0 = rank_index(rank_0)
-    rank_index_1 = rank_index(rank_1)
-    rank_index_0 >= rank_index_1
+    rank_index(rank_0) >= rank_index(rank_1)
   end
 
   def wins?(_first, %Pinochle.Card{suit: trump}, trump), do: false
