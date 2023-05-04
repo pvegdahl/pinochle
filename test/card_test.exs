@@ -43,6 +43,12 @@ defmodule CardTest do
     assert Enum.count(deck()) == 48
   end
 
+  test "Deck has 2 each of 24 distinct cards" do
+    card_frequencies = deck() |> Enum.frequencies()
+    assert card_frequencies |> Enum.count() == 24
+    assert card_frequencies |> Map.values() |> Enum.uniq() == [2]
+  end
+
   test "Each hand has 12 cards" do
     hands()
     |> Enum.each(fn hand -> assert Enum.count(hand) == 12 end)
