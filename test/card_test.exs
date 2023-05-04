@@ -53,4 +53,15 @@ defmodule CardTest do
     hands()
     |> Enum.each(fn hand -> assert Enum.count(hand) == 12 end)
   end
+
+  test "The hands combined make up the deck" do
+    sorted_hands = hands() |> Enum.concat() |> Enum.sort()
+    sorted_deck = deck() |> Enum.sort()
+
+    assert sorted_hands == sorted_deck
+  end
+
+  test "The hands are randomized" do
+    assert hands() != hands()
+  end
 end

@@ -40,8 +40,8 @@ defmodule Pinochle.Card do
 
   @spec hands() :: [[Pinochle.Card.t(), ...], ...]
   def hands() do
-    new(:queen, :hearts)
-    |> List.duplicate(12)
-    |> List.duplicate(4)
+    deck()
+    |> Enum.shuffle()
+    |> Enum.chunk_every(12)
   end
 end
