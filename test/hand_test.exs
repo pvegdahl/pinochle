@@ -41,4 +41,12 @@ defmodule HandTest do
              Pinochle.Card.new(:jack, :diamonds)
            ]
   end
+
+  test "Remove multiple cards" do
+    hand = [Pinochle.Card.new(:queen, :spades), Pinochle.Card.new(:nine, :clubs), Pinochle.Card.new(:jack, :diamonds)]
+
+    assert remove_multiple(hand, [Pinochle.Card.new(:queen, :spades), Pinochle.Card.new(:jack, :diamonds)]) == [
+             Pinochle.Card.new(:nine, :clubs)
+           ]
+  end
 end

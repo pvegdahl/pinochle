@@ -11,4 +11,8 @@ defmodule Pinochle.Hand do
   def remove(hand, card) do
     hand |> List.delete(card)
   end
+
+  def remove_multiple(hand, cards) do
+    Enum.reduce(cards, hand, &List.delete(&2, &1))
+  end
 end
