@@ -35,10 +35,6 @@ defmodule CardTest do
     assert !wins?(new(:ace, :spades), new(:nine, :hearts), :hearts)
   end
 
-  test "Deal 4 hands" do
-    assert Enum.count(hands()) == 4
-  end
-
   test "Deck has 48 cards" do
     assert Enum.count(deck()) == 48
   end
@@ -47,21 +43,5 @@ defmodule CardTest do
     card_frequencies = deck() |> Enum.frequencies()
     assert card_frequencies |> Enum.count() == 24
     assert card_frequencies |> Map.values() |> Enum.uniq() == [2]
-  end
-
-  test "Each hand has 12 cards" do
-    hands()
-    |> Enum.each(fn hand -> assert Enum.count(hand) == 12 end)
-  end
-
-  test "The hands combined make up the deck" do
-    sorted_hands = hands() |> Enum.concat() |> Enum.sort()
-    sorted_deck = deck() |> Enum.sort()
-
-    assert sorted_hands == sorted_deck
-  end
-
-  test "The hands are randomized" do
-    assert hands() != hands()
   end
 end

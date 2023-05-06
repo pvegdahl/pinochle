@@ -37,11 +37,4 @@ defmodule Pinochle.Card do
     for(rank <- ranks(), suit <- suits(), do: new(rank, suit))
     |> Enum.flat_map(&[&1, &1])
   end
-
-  @spec hands() :: [[Pinochle.Card.t(), ...], ...]
-  def hands() do
-    deck()
-    |> Enum.shuffle()
-    |> Enum.chunk_every(12)
-  end
 end
