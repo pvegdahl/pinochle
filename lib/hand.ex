@@ -7,4 +7,8 @@ defmodule Pinochle.Hand do
     |> Enum.shuffle()
     |> Enum.chunk_every(12)
   end
+
+  def remove(hand, card) do
+    hand |> List.delete(card)
+  end
 end

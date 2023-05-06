@@ -32,4 +32,13 @@ defmodule HandTest do
     |> Enum.map(&Enum.sort/1)
     |> Enum.sort()
   end
+
+  test "Remove a card from the hand" do
+    hand = [Pinochle.Card.new(:queen, :spades), Pinochle.Card.new(:nine, :clubs), Pinochle.Card.new(:jack, :diamonds)]
+
+    assert remove(hand, Pinochle.Card.new(:nine, :clubs)) == [
+             Pinochle.Card.new(:queen, :spades),
+             Pinochle.Card.new(:jack, :diamonds)
+           ]
+  end
 end
