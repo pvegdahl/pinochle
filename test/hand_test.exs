@@ -49,4 +49,18 @@ defmodule HandTest do
              Pinochle.Card.new(:nine, :clubs)
            ]
   end
+
+  test "Add cards to hand" do
+    hand = [Pinochle.Card.new(:ace, :spades), Pinochle.Card.new(:ten, :spades), Pinochle.Card.new(:king, :spades)]
+
+    # Sort the cards in the hands, because order is unspecified for the add_cards method
+    assert Enum.sort(add_cards(hand, [Pinochle.Card.new(:queen, :spades), Pinochle.Card.new(:jack, :spades)])) ==
+             Enum.sort([
+               Pinochle.Card.new(:ace, :spades),
+               Pinochle.Card.new(:ten, :spades),
+               Pinochle.Card.new(:king, :spades),
+               Pinochle.Card.new(:queen, :spades),
+               Pinochle.Card.new(:jack, :spades)
+             ])
+  end
 end
