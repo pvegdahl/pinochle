@@ -1,5 +1,4 @@
 defmodule Pinochle.Hand do
-
   @spec deal() :: [[Pinochle.Card.t(), ...], ...]
   def deal() do
     Pinochle.Card.deck()

@@ -22,4 +22,14 @@ defmodule HandTest do
   test "The hands are randomized" do
     assert deal() != deal()
   end
+
+  test "The hands are randomized even when sorted" do
+    assert sort_hands(deal()) != sort_hands(deal())
+  end
+
+  defp sort_hands(hands) do
+    hands
+    |> Enum.map(&Enum.sort/1)
+    |> Enum.sort()
+  end
 end
