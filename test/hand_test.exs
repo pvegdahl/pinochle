@@ -70,8 +70,14 @@ defmodule HandTest do
   #   - If can't match suit, must play trump if it wins
   #   - Otherwise, you can play anything
   test "All in suit cards are playable if ace is winning" do
-    hand =[ Pinochle.Card.new(:ace, :spades), Pinochle.Card.new(:ten, :spades), Pinochle.Card.new(:king, :spades), Pinochle.Card.new(:queen, :spades), Pinochle.Card.new(:jack, :spades) ]
+    hand = [
+      Pinochle.Card.new(:ace, :spades),
+      Pinochle.Card.new(:ten, :spades),
+      Pinochle.Card.new(:king, :spades),
+      Pinochle.Card.new(:queen, :spades),
+      Pinochle.Card.new(:jack, :spades)
+    ]
+
     assert playable(hand, Pinochle.Card.new(:ace, :spades)) == hand
   end
-
 end

@@ -23,7 +23,8 @@ defmodule Pinochle.Hand do
     cards ++ hand
   end
 
-  @spec playable(hand :: Pinochle.Hand.t(), led_suit :: Pinochle.Card.suit(), winning_card :: Pinochle.Card.suit()) :: Pinochle.Hand.t()
+  @spec playable(hand :: Pinochle.Hand.t(), led_suit :: Pinochle.Card.suit(), winning_card :: Pinochle.Card.suit()) ::
+          Pinochle.Hand.t()
   def playable(hand, _winning_card, _led_suit \\ nil, _trump \\ nil) do
     hand
   end
