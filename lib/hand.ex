@@ -1,5 +1,7 @@
 defmodule Pinochle.Hand do
-  @spec deal() :: [[Pinochle.Card.t(), ...], ...]
+  @type t :: [Pinochle.Card, ...]
+
+  @spec deal() :: [Pinochle.Hand.t(), ...]
   def deal() do
     Pinochle.Card.deck()
     |> Enum.shuffle()
