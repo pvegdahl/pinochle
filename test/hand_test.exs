@@ -98,7 +98,7 @@ defmodule HandTest do
     hand = [
       Pinochle.Card.new(:ace, :spades),
       Pinochle.Card.new(:jack, :spades),
-      Pinochle.Card.new(:ten, :hearts),
+      Pinochle.Card.new(:ten, :hearts)
     ]
 
     winning_card = Pinochle.Card.new(:nine, :hearts)
@@ -111,7 +111,5 @@ defmodule HandTest do
 end
 
 # TODO
-# Must match the led suit if possible, even if trump is winning
 # If possible to play a winning trump, you must
 # If you can't match suit and can't win with trump, then anything goes
-
