@@ -25,7 +25,14 @@ defmodule Pinochle.Hand do
 
   @spec playable(hand :: Pinochle.Hand.t(), led_suit :: Pinochle.Card.suit(), winning_card :: Pinochle.Card.suit()) ::
           Pinochle.Hand.t()
-  def playable(hand, _winning_card, _led_suit \\ nil, _trump \\ nil) do
+  def playable(hand, winning_card, _led_suit \\ nil, _trump \\ nil) do
     hand
+    |> Enum.filter(&(!Pinochle.Card.wins?(winning_card, &1)))
+    |> default_when_empty(hand)
   end
+
+
+  @spec default_when_empty(list :: Pinochle.Hand.t(), default :: Pinochle.Hand.t()) :: Pinochle.Hand.t()
+  defp default_when_empty([], default), do: default
+  defp default_when_empty(list, _default), do: list
 end

@@ -55,13 +55,17 @@ defmodule HandTest do
 
     # Sort the cards in the hands, because order is unspecified for the add_cards method
     assert Enum.sort(add_cards(hand, [Pinochle.Card.new(:queen, :spades), Pinochle.Card.new(:jack, :spades)])) ==
-             Enum.sort([
-               Pinochle.Card.new(:ace, :spades),
-               Pinochle.Card.new(:ten, :spades),
-               Pinochle.Card.new(:king, :spades),
-               Pinochle.Card.new(:queen, :spades),
-               Pinochle.Card.new(:jack, :spades)
-             ])
+             Enum.sort(run_in_spades())
+  end
+
+  defp run_in_spades() do
+    [
+      Pinochle.Card.new(:ace, :spades),
+      Pinochle.Card.new(:ten, :spades),
+      Pinochle.Card.new(:king, :spades),
+      Pinochle.Card.new(:queen, :spades),
+      Pinochle.Card.new(:jack, :spades)
+    ]
   end
 
   # Playable cards:
@@ -70,14 +74,11 @@ defmodule HandTest do
   #   - If can't match suit, must play trump if it wins
   #   - Otherwise, you can play anything
   test "All in suit cards are playable if ace is winning" do
-    hand = [
-      Pinochle.Card.new(:ace, :spades),
-      Pinochle.Card.new(:ten, :spades),
-      Pinochle.Card.new(:king, :spades),
-      Pinochle.Card.new(:queen, :spades),
-      Pinochle.Card.new(:jack, :spades)
-    ]
-
-    assert playable(hand, Pinochle.Card.new(:ace, :spades)) == hand
+    assert playable(run_in_spades(), Pinochle.Card.new(:ace, :spades)) == run_in_spades()
   end
+
+  test "All in suit cards higher than winning card are playable" do
+    assert playable(run_in_spades(), Pinochle.Card.new(:king, :spades)) |> Enum.sort() == [Pinochle.Card.new(:ten, :spades), Pinochle.Card.new(:ace, :spades)] |> Enum.sort()
+  end
+
 end
