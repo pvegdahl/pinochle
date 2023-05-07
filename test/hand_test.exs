@@ -74,11 +74,23 @@ defmodule HandTest do
   #   - If can't match suit, must play trump if it wins
   #   - Otherwise, you can play anything
   test "All in suit cards are playable if ace is winning" do
-    assert playable(run_in_spades(), Pinochle.Card.new(:ace, :spades)) == run_in_spades()
+    assert playable(run_in_spades(), Pinochle.Card.new(:ace, :spades), :spades, :diamonds) == run_in_spades()
   end
 
   test "All in suit cards higher than winning card are playable" do
-    assert playable(run_in_spades(), Pinochle.Card.new(:king, :spades)) |> Enum.sort() == [Pinochle.Card.new(:ten, :spades), Pinochle.Card.new(:ace, :spades)] |> Enum.sort()
+    assert playable(run_in_spades(), Pinochle.Card.new(:king, :spades), :spades, :diamonds) |> Enum.sort() ==
+             [Pinochle.Card.new(:ten, :spades), Pinochle.Card.new(:ace, :spades)] |> Enum.sort()
   end
 
+  test "Only trump is playable if you have some and can't match suit" do
+    hand = [
+      Pinochle.Card.new(:ace, :spades),
+      Pinochle.Card.new(:jack, :spades),
+      Pinochle.Card.new(:ten, :hearts),
+      Pinochle.Card.new(:king, :clubs)
+    ]
+
+    assert playable(hand, Pinochle.Card.new(:nine, :diamonds), :diamonds, :spades) |> Enum.sort() ==
+             [Pinochle.Card.new(:ace, :spades), Pinochle.Card.new(:jack, :spades)] |> Enum.sort()
+  end
 end
