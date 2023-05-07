@@ -108,8 +108,22 @@ defmodule HandTest do
     assert playable(hand, winning_card, led_suit, trump) |> Enum.sort() ==
              [Pinochle.Card.new(:ace, :spades), Pinochle.Card.new(:jack, :spades)] |> Enum.sort()
   end
-end
 
-# TODO
-# If possible to play a winning trump, you must
-# If you can't match suit and can't win with trump, then anything goes
+  test "Must play a winning trump if possible" do
+    hand = [
+      Pinochle.Card.new(:ace, :spades),
+      Pinochle.Card.new(:jack, :spades),
+      Pinochle.Card.new(:ten, :hearts)
+    ]
+
+    winning_card = Pinochle.Card.new(:queen, :spades)
+    led_suit = :clubs
+    trump = :spades
+
+    assert playable(hand, winning_card, led_suit, trump) == [Pinochle.Card.new(:ace, :spades)]
+  end
+
+  test "Anything goes when you can't match suit and can't win with trump" do
+    assert "TODO" == false
+  end
+end
