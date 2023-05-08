@@ -124,6 +124,16 @@ defmodule HandTest do
   end
 
   test "Anything goes when you can't match suit and can't win with trump" do
-    assert "TODO" == false
+    hand = [
+      Pinochle.Card.new(:queen, :spades),
+      Pinochle.Card.new(:jack, :diamonds),
+      Pinochle.Card.new(:ten, :hearts)
+    ]
+
+    winning_card = Pinochle.Card.new(:king, :spades)
+    led_suit = :clubs
+    trump = :spades
+
+    assert playable(hand, winning_card, led_suit, trump) == hand
   end
 end
