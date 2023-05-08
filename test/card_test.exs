@@ -16,19 +16,19 @@ defmodule CardTest do
   end
 
   test "First card wins if they are the same" do
-    assert first_wins?(new(:ace, :clubs), new(:ace, :clubs))
+    assert first_wins?(new(:ace, :clubs), new(:ace, :clubs), :spades)
   end
 
   test "First card loses if it is lower in the same suit" do
-    assert !first_wins?(new(:king, :clubs), new(:ace, :clubs))
+    assert !first_wins?(new(:king, :clubs), new(:ace, :clubs), :diamonds)
   end
 
   test "First card wins if it is higher in the same suit" do
-    assert first_wins?(new(:king, :clubs), new(:jack, :clubs))
+    assert first_wins?(new(:king, :clubs), new(:jack, :clubs), :clubs)
   end
 
   test "First card wins if suits do not match" do
-    assert first_wins?(new(:nine, :diamonds), new(:ten, :clubs))
+    assert first_wins?(new(:nine, :diamonds), new(:ten, :clubs), :hearts)
   end
 
   test "An off suit trump card wins" do
