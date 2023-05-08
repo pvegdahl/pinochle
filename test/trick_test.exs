@@ -17,10 +17,11 @@ defmodule TrickTest do
   end
 
   defp play_n_cards(trick, 0), do: trick
+
   defp play_n_cards(trick, n) do
     trick
     |> play_card(Pinochle.Card.new(:jack, :diamonds))
-    |> play_n_cards(n-1)
+    |> play_n_cards(n - 1)
   end
 
   test "The current_player count wraps from 3 -> 0" do
