@@ -36,22 +36,30 @@ defmodule TrickTest do
   end
 
   test "Winning card is the only card" do
-    assert Trick.new(0, a_card()) |> Trick.winning_card() == a_card()
+    assert Trick.new(0, a_card()) |> Trick.winning_card(:spades) == a_card()
   end
 
   test "First card wins if higher in same suit" do
     first = Card.new(:ten, :hearts)
     second = Card.new(:king, :hearts)
-    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.winning_card() == first
+    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.winning_card(:spades) == first
   end
 
   test "Second card wins if higher in same suit" do
     first = Card.new(:king, :hearts)
     second = Card.new(:ten, :hearts)
-    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.winning_card() == second
+    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.winning_card(:spades) == second
+  end
+
+  test "Only trump wins against others" do
+    first = Card.new(:king, :hearts)
+    second = Card.new(:nine, :clubs)
+    third = Card.new(:ten, :hearts)
+
+    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.play_card(third) |> Trick.winning_card(:clubs) ==
+             second
   end
 end
 
 # TODO
-# - Get winning card
 # - Get winning player
