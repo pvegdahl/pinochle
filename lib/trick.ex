@@ -20,4 +20,19 @@ defmodule Pinochle.Trick do
   def play_card(%Trick{cards: cards} = trick, card) do
     %Trick{trick | cards: [card | cards]}
   end
+
+  @spec winning_card(trick :: Trick.t()) :: Card.t()
+  def winning_card(%Trick{cards: cards}) do
+    cards
+    |> Enum.reverse()
+    |> Enum.reduce(&winner(&2, &1, :spades))
+  end
+
+  defp winner(first, second, trump) do
+    if Card.first_wins?(first, second, trump) do
+      first
+    else
+      second
+    end
+  end
 end

@@ -34,6 +34,22 @@ defmodule TrickTest do
   test "The current_player count wraps with more cards played" do
     assert Trick.new(2, a_card()) |> play_n_cards(2) |> Trick.current_player() == 1
   end
+
+  test "Winning card is the only card" do
+    assert Trick.new(0, a_card()) |> Trick.winning_card() == a_card()
+  end
+
+  test "First card wins if higher in same suit" do
+    first = Card.new(:ten, :hearts)
+    second = Card.new(:king, :hearts)
+    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.winning_card() == first
+  end
+
+  test "Second card wins if higher in same suit" do
+    first = Card.new(:king, :hearts)
+    second = Card.new(:ten, :hearts)
+    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.winning_card() == second
+  end
 end
 
 # TODO
