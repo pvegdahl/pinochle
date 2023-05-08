@@ -1,5 +1,5 @@
 defmodule Pinochle.Trick do
-
+  @enforce_keys [:starting_player, :cards]
   defstruct [:starting_player, :cards]
 
   @type t :: %__MODULE__{starting_player: 0..3, cards: [Pinochle.Card.t()]}
