@@ -31,4 +31,7 @@ defmodule Pinochle.Trick do
   defp winner(first, second, trump) do
     if(Card.first_wins?(first, second, trump), do: first, else: second)
   end
+
+  @spec winning_player(trick :: Trick.t(), trump :: Card.suit()) :: 0..3
+  def winning_player(%Trick{starting_player: starting_player}, _trump), do: starting_player
 end

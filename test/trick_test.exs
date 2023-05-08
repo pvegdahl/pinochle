@@ -59,6 +59,20 @@ defmodule TrickTest do
     assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.play_card(third) |> Trick.winning_card(:clubs) ==
              second
   end
+
+  test "Get winning player when first player wins" do
+    0..3 |> Enum.each(&test_starting_player_wins/1)
+  end
+
+  defp test_starting_player_wins(starting_player) do
+    trick =
+      Trick.new(starting_player, Card.new(:ace, :hearts))
+      |> Trick.play_card(Card.new(:jack, :hearts))
+      |> Trick.play_card(Card.new(:queen, :hearts))
+      |> Trick.play_card(Card.new(:king, :hearts))
+
+    assert Trick.winning_player(trick, :clubs) == starting_player
+  end
 end
 
 # TODO
