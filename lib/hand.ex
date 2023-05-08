@@ -1,73 +1,63 @@
 defmodule Pinochle.Hand do
-  @type t :: [Pinochle.Card.t()]
+  alias Pinochle.Card, as: Card
+  alias Pinochle.Hand, as: Hand
 
-  @spec deal() :: [Pinochle.Hand.t(), ...]
+  @type t :: [Card.t()]
+
+  @spec deal() :: [Hand.t(), ...]
   def deal() do
-    Pinochle.Card.deck()
+    Card.deck()
     |> Enum.shuffle()
     |> Enum.chunk_every(12)
   end
 
-  @spec remove_card(hand :: Pinochle.Hand.t(), card :: Pinochle.Card.t()) :: Pinochle.Hand.t()
+  @spec remove_card(hand :: Hand.t(), card :: Card.t()) :: Hand.t()
   def remove_card(hand, card) do
     hand |> List.delete(card)
   end
 
-  @spec remove_cards(hand :: Pinochle.Hand.t(), card :: [Pinochle.Card.t()]) :: Pinochle.Hand.t()
+  @spec remove_cards(hand :: Hand.t(), card :: [Card.t()]) :: Hand.t()
   def remove_cards(hand, cards) do
     Enum.reduce(cards, hand, &List.delete(&2, &1))
   end
 
-  @spec add_cards(hand :: Pinochle.Hand.t(), card :: [Pinochle.Card.t()]) :: Pinochle.Hand.t()
+  @spec add_cards(hand :: Hand.t(), card :: [Card.t()]) :: Hand.t()
   def add_cards(hand, cards) do
     cards ++ hand
   end
 
-  @spec playable(
-          hand :: Pinochle.Hand.t(),
-          winning_card :: Pinochle.Card.t(),
-          led_suit :: Pinochle.Card.suit(),
-          trump :: Pinochle.Card.suit()
-        ) :: Pinochle.Hand.t()
+  @spec playable(hand :: Hand.t(), winning_card :: Card.t(), led_suit :: Card.suit(), trump :: Card.suit()) :: Hand.t()
   def playable(hand, winning_card, led_suit, trump) do
     hand
     |> candidate_cards(led_suit)
     |> filter_winners_or_everything(winning_card, trump)
   end
 
-  @spec candidate_cards(hand :: Pinochle.Hand.t(), led_suit :: Pinochle.Card.suit()) :: [Pinochle.Card.t()]
+  @spec candidate_cards(hand :: Hand.t(), led_suit :: Card.suit()) :: [Card.t()]
   defp candidate_cards(hand, led_suit) do
     hand
     |> cards_in_suit(led_suit)
     |> default_when_empty(hand)
   end
 
-  @spec filter_winners_or_everything(
-          cards :: [Pinochle.Card.t()],
-          winning_card :: Pinochle.Card.t(),
-          trump :: Pinochle.Card.suit()
-        ) :: [Pinochle.Card.t()]
+  @spec filter_winners_or_everything(cards :: [Card.t()], winning_card :: Card.t(), trump :: Card.suit()) :: [Card.t()]
   defp filter_winners_or_everything(cards, winning_card, trump) do
     cards
     |> filter_cards_that_win(winning_card, trump)
     |> default_when_empty(cards)
   end
 
-  @spec filter_cards_that_win(
-          cards :: [Pinochle.Card.t()],
-          winning_card :: Pinochle.Card.t(),
-          trump :: Pinochle.Card.suit()
-        ) :: [Pinochle.Card.t()]
+  @spec filter_cards_that_win(cards :: [Card.t()], winning_card :: Card.t(), trump :: Card.suit()) :: [Card.t()]
   defp filter_cards_that_win(cards, winning_card, trump) do
-    cards |> Enum.filter(&Pinochle.Card.second_wins?(winning_card, &1, trump))
+    cards |> Enum.filter(&Card.second_wins?(winning_card, &1, trump))
   end
 
-  @spec cards_in_suit(hand :: Pinochle.Hand.t(), suit :: Pinochle.Card.suit()) :: [Pinochle.Card.t()]
+  @spec cards_in_suit(hand :: Hand.t(), suit :: Card.suit()) :: [Card.t()]
   defp cards_in_suit(hand, suit) do
     hand |> Enum.filter(fn card -> card.suit == suit end)
   end
 
-  @spec default_when_empty(list :: [Pinochle.Card.t()], default :: Pinochle.Hand.t()) :: [Pinochle.Card.t()]
+  @spec default_when_empty(list :: [Card.t()], default :: Hand.t()) :: [Card.t()]
   defp default_when_empty([], default), do: default
   defp default_when_empty(list, _default), do: list
 end
