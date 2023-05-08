@@ -18,13 +18,12 @@ defmodule Pinochle.Trick do
 
   @spec play_card(trick :: Trick.t(), card :: Card.t()) :: Trick.t()
   def play_card(%Trick{cards: cards} = trick, card) do
-    %Trick{trick | cards: [card | cards]}
+    %Trick{trick | cards: cards ++ [card]}
   end
 
   @spec winning_card(trick :: Trick.t(), trump :: Card.suit()) :: Card.t()
   def winning_card(%Trick{cards: cards}, trump) do
     cards
-    |> Enum.reverse()
     |> Enum.reduce(&winner(&2, &1, trump))
   end
 
@@ -37,7 +36,7 @@ defmodule Pinochle.Trick do
   def winning_player(%Trick{starting_player: starting_player, cards: cards} = trick, trump) do
     winning_card = winning_card(trick, trump)
 
-    Enum.reverse(cards)
+    cards
     |> Enum.find_index(&(&1 == winning_card))
     |> then(fn index -> index + starting_player end)
     |> Integer.mod(4)
