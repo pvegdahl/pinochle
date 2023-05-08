@@ -28,10 +28,18 @@ defmodule Pinochle.Trick do
     |> Enum.reduce(&winner(&2, &1, trump))
   end
 
+  @spec winner(first :: Card.t(), second :: Card.t(), trump :: Card.suit()) :: Card.t()
   defp winner(first, second, trump) do
     if(Card.first_wins?(first, second, trump), do: first, else: second)
   end
 
   @spec winning_player(trick :: Trick.t(), trump :: Card.suit()) :: 0..3
-  def winning_player(%Trick{starting_player: starting_player}, _trump), do: starting_player
+  def winning_player(%Trick{starting_player: starting_player, cards: cards} = trick, trump) do
+    winning_card = winning_card(trick, trump)
+
+    Enum.reverse(cards)
+    |> Enum.find_index(&(&1 == winning_card))
+    |> then(fn index -> index + starting_player end)
+    |> Integer.mod(4)
+  end
 end

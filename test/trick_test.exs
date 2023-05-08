@@ -73,7 +73,24 @@ defmodule TrickTest do
 
     assert Trick.winning_player(trick, :clubs) == starting_player
   end
-end
 
-# TODO
-# - Get winning player
+  test "Third player wins with wrap" do
+    trick =
+      Trick.new(3, Card.new(:ace, :hearts))
+      |> Trick.play_card(Card.new(:jack, :hearts))
+      |> Trick.play_card(Card.new(:queen, :clubs))
+      |> Trick.play_card(Card.new(:king, :hearts))
+
+    assert Trick.winning_player(trick, :clubs) == 1
+  end
+
+  test "First instance wins with multiple of the same winning card" do
+    trick =
+      Trick.new(2, Card.new(:nine, :spades))
+      |> Trick.play_card(Card.new(:ace, :spades))
+      |> Trick.play_card(Card.new(:queen, :diamonds))
+      |> Trick.play_card(Card.new(:ace, :spades))
+
+    assert Trick.winning_player(trick, :hearts) == 3
+  end
+end
