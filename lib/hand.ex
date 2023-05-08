@@ -59,7 +59,7 @@ defmodule Pinochle.Hand do
           trump :: Pinochle.Card.suit()
         ) :: [Pinochle.Card.t()]
   defp filter_cards_that_win(cards, winning_card, trump) do
-    cards |> Enum.filter(&(Pinochle.Card.second_wins?(winning_card, &1, trump)))
+    cards |> Enum.filter(&Pinochle.Card.second_wins?(winning_card, &1, trump))
   end
 
   @spec cards_in_suit(hand :: Pinochle.Hand.t(), suit :: Pinochle.Card.suit()) :: [Pinochle.Card.t()]
