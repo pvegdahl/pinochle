@@ -38,7 +38,7 @@ defmodule Pinochle.Trick do
 
     cards
     |> Enum.find_index(&(&1 == winning_card))
-    |> then(fn index -> index + starting_player end)
+    |> then(&(&1 + starting_player))
     |> Integer.mod(4)
   end
 end
