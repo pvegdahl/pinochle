@@ -17,7 +17,14 @@ defmodule Pinochle.Game do
     Enum.at(hands, player)
   end
 
-  def play_card(%Game{current_player: current_player} = game, card) do
-    %Game{game | current_player: Integer.mod(current_player + 1, 4)}
+  def play_card(%Game{current_player: current_player, hands: hands} = game, card) do
+    new_current_player = Integer.mod(current_player + 1, 4)
+    new_hands = hands |> Enum.map(&Hand.remove_card(&1, card))
+
+    %Game{game | current_player: new_current_player, hands: new_hands}
+  end
+
+  defp current_hand(%Game{current_player: current_player} = game) do
+    game |> hand(current_player)
   end
 end
