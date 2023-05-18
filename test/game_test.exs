@@ -28,19 +28,21 @@ defmodule GameTest do
   test "A player playing a card removes it from their hand" do
     game = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
 
-    assert Game.hand(game, 0) |> Enum.sort() == [
-             Card.new(:nine, :clubs),
-             Card.new(:nine, :clubs),
-             Card.new(:jack, :clubs),
-             Card.new(:jack, :clubs),
-             Card.new(:queen, :clubs),
-             Card.new(:king, :clubs),
-             Card.new(:king, :clubs),
-             Card.new(:ten, :clubs),
-             Card.new(:ten, :clubs),
-             Card.new(:ace, :clubs),
-             Card.new(:ace, :clubs),
-           ] |> Enum.sort()
+    assert Game.hand(game, 0) |> Enum.sort() ==
+             [
+               Card.new(:nine, :clubs),
+               Card.new(:nine, :clubs),
+               Card.new(:jack, :clubs),
+               Card.new(:jack, :clubs),
+               Card.new(:queen, :clubs),
+               Card.new(:king, :clubs),
+               Card.new(:king, :clubs),
+               Card.new(:ten, :clubs),
+               Card.new(:ten, :clubs),
+               Card.new(:ace, :clubs),
+               Card.new(:ace, :clubs)
+             ]
+             |> Enum.sort()
   end
 
   defp sorted_game(starting_player) do
