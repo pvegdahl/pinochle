@@ -53,3 +53,13 @@ defmodule GameTest do
     %Game{current_player: starting_player, hands: hands}
   end
 end
+
+# TODO
+# - play_card
+#   + Don't remove from other hands
+#   + Update the trick
+#     ~ New trick
+#     ~ Middle of trick
+#     ~ End of trick
+#   + Don't allow if the card isn't playable.
+#   +
