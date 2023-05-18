@@ -14,9 +14,15 @@ defmodule GameTest do
   end
 
   test "A player playing a card increments to the next player" do
-    game = Game.new(0) |> Game.play_card(Card.new(:queen, :clubs))
+    game = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
 
     assert Game.current_player(game) == 1
+  end
+
+  test "Player 3 playing a card wraps back to player 0" do
+    game = sorted_game(3) |> Game.play_card(Card.new(:king, :spades))
+
+    assert Game.current_player(game) == 0
   end
 
   defp sorted_game(starting_player) do

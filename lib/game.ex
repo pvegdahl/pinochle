@@ -18,6 +18,6 @@ defmodule Pinochle.Game do
   end
 
   def play_card(%Game{current_player: current_player} = game, card) do
-    %Game{game | current_player: current_player + 1}
+    %Game{game | current_player: Integer.mod(current_player + 1, 4)}
   end
 end
