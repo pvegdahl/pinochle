@@ -17,5 +17,7 @@ defmodule Pinochle.Game do
     Enum.at(hands, player)
   end
 
-  def play_card(game, card), do: nil
+  def play_card(%Game{current_player: current_player} = game, card) do
+    %Game{game | current_player: current_player + 1}
+  end
 end
