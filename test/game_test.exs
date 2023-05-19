@@ -81,9 +81,20 @@ defmodule GameTest do
   test "Playing the first card of the game creates a new trick" do
     game = sorted_game(3)
 
-    updated_game = Game.play_card(game, Card.new(:nine, :clubs))
+    updated_game = Game.play_card(game, Card.new(:nine, :spades))
 
-    assert Game.current_trick(updated_game) == Trick.new(3, Card.new(:nine, :clubs))
+    assert Game.current_trick(updated_game) == Trick.new(3, Card.new(:nine, :spades))
+  end
+
+  test "Playing another card updates the existing trick" do
+    game = sorted_game(3) |> Game.play_card(Card.new(:nine, :spades))
+
+    trick_cards = game
+    |> Game.play_card(Card.new(:ten, :clubs))
+    |> Game.current_trick()
+    |> Trick.cards()
+
+    assert trick_cards == [Card.new(:nine, :spades), Card.new(:ten, :clubs)]
   end
 end
 
