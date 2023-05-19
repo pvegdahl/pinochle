@@ -4,13 +4,13 @@ defmodule Pinochle.Game do
   alias Pinochle.Hand, as: Hand
   alias Pinochle.Trick, as: Trick
 
-  @enforce_keys [:current_player, :hands]
-  defstruct [:current_player, :hands]
+  @enforce_keys [:current_player, :hands, :tricks]
+  defstruct [:current_player, :hands, :tricks]
 
-  @type t :: %__MODULE__{current_player: 0..3, hands: [Hand.t()]}
+  @type t :: %__MODULE__{current_player: 0..3, hands: [Hand.t()], tricks: [Trick.t()]}
 
   @spec new(starting_player :: 0..3) :: Game.t()
-  def new(starting_player), do: %Game{current_player: starting_player, hands: Hand.deal()}
+  def new(starting_player), do: %Game{current_player: starting_player, hands: Hand.deal(), tricks: []}
 
   @spec current_player(game :: Game.t()) :: 0..3
   def current_player(%Game{current_player: current_player}), do: current_player
@@ -26,7 +26,9 @@ defmodule Pinochle.Game do
     new_hand = current_hand(game) |> Hand.remove_card(card)
     new_hands = List.replace_at(hands, current_player, new_hand)
 
-    %Game{game | current_player: new_current_player, hands: new_hands}
+    new_trick = Trick.new(current_player, card)
+
+    %Game{game | current_player: new_current_player, hands: new_hands, tricks: [new_trick]}
   end
 
   defp current_hand(%Game{current_player: current_player} = game) do
@@ -34,5 +36,5 @@ defmodule Pinochle.Game do
   end
 
   @spec current_trick(game :: Game.t()) :: Trick.t() | nil
-  def current_trick(_game), do: nil
+  def current_trick(%Game{tricks: tricks}), do: List.first(tricks)
 end

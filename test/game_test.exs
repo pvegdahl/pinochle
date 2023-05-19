@@ -3,6 +3,7 @@ defmodule GameTest do
 
   alias Pinochle.Game, as: Game
   alias Pinochle.Card, as: Card
+  alias Pinochle.Trick, as: Trick
 
   test "A new game has current player" do
     0..3 |> Enum.each(fn n -> assert Game.new(n) |> Game.current_player() == n end)
@@ -26,7 +27,7 @@ defmodule GameTest do
       |> Enum.sort_by(fn card -> card.suit end)
       |> Enum.chunk_every(12)
 
-    %Game{current_player: starting_player, hands: hands}
+    %Game{current_player: starting_player, hands: hands, tricks: []}
   end
 
   test "Player 3 playing a card wraps back to player 0" do
@@ -63,7 +64,7 @@ defmodule GameTest do
       [Card.new(:jack, :diamonds)]
     ]
 
-    game = %Game{current_player: 2, hands: hands}
+    game = %Game{current_player: 2, hands: hands, tricks: []}
 
     updated_game = Game.play_card(game, Card.new(:jack, :diamonds))
 
@@ -78,14 +79,17 @@ defmodule GameTest do
   end
 
   test "Playing the first card of the game creates a new trick" do
-    game = sorted_game(1)
+    game = sorted_game(3)
+
+    updated_game = Game.play_card(game, Card.new(:nine, :clubs))
+
+    assert Game.current_trick(updated_game) == Trick.new(3, Card.new(:nine, :clubs))
   end
 end
 
 # TODO
 # - play_card
 #   + Update the trick
-#     ~ New trick
 #     ~ Middle of trick
 #     ~ End of trick
 #   + Don't allow if the card isn't playable.
