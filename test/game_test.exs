@@ -45,6 +45,24 @@ defmodule GameTest do
              |> Enum.sort()
   end
 
+  test "A player playing a card removes it from their hand ONLY" do
+    hands = [
+      [Card.new(:jack, :diamonds)],
+      [Card.new(:jack, :diamonds)],
+      [Card.new(:jack, :diamonds)],
+      [Card.new(:jack, :diamonds)]
+    ]
+
+    game = %Game{current_player: 2, hands: hands}
+
+    updated_game = Game.play_card(game, Card.new(:jack, :diamonds))
+
+    assert Game.hand(updated_game, 0) == [Card.new(:jack, :diamonds)]
+    assert Game.hand(updated_game, 1) == [Card.new(:jack, :diamonds)]
+    assert Game.hand(updated_game, 2) == []
+    assert Game.hand(updated_game, 3) == [Card.new(:jack, :diamonds)]
+  end
+
   defp sorted_game(starting_player) do
     # Each player will have all cards of one suit: clubs, diamonds, hearts, spades
     hands =
