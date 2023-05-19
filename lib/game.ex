@@ -5,9 +5,9 @@ defmodule Pinochle.Game do
   alias Pinochle.Trick, as: Trick
 
   @enforce_keys [:current_player, :hands]
-  defstruct current_player: nil, hands: nil, tricks: []
+  defstruct current_player: nil, hands: nil, trick: nil
 
-  @type t :: %__MODULE__{current_player: 0..3, hands: [Hand.t()], tricks: [Trick.t()]}
+  @type t :: %__MODULE__{current_player: 0..3, hands: [Hand.t()], trick: Trick.t() | nil}
 
   @spec new(starting_player :: 0..3) :: Game.t()
   def new(starting_player), do: %Game{current_player: starting_player, hands: Hand.deal()}
@@ -28,7 +28,7 @@ defmodule Pinochle.Game do
 
     new_trick = Trick.new(current_player, card)
 
-    %Game{game | current_player: new_current_player, hands: new_hands, tricks: [new_trick]}
+    %Game{game | current_player: new_current_player, hands: new_hands, trick: new_trick}
   end
 
   defp current_hand(%Game{current_player: current_player} = game) do
@@ -36,5 +36,5 @@ defmodule Pinochle.Game do
   end
 
   @spec current_trick(game :: Game.t()) :: Trick.t() | nil
-  def current_trick(%Game{tricks: tricks}), do: List.first(tricks)
+  def current_trick(%Game{trick: trick}), do: trick
 end
