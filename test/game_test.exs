@@ -72,6 +72,14 @@ defmodule GameTest do
     assert Game.hand(updated_game, 2) == []
     assert Game.hand(updated_game, 3) == [Card.new(:jack, :diamonds)]
   end
+
+  test "A new game does not have a current trick" do
+    assert Game.new(0) |> Game.current_trick() == nil
+  end
+
+  test "Playing the first card of the game creates a new trick" do
+    game = sorted_game(1)
+  end
 end
 
 # TODO

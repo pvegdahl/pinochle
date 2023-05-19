@@ -2,6 +2,7 @@ defmodule Pinochle.Game do
   alias Pinochle.Game, as: Game
   alias Pinochle.Card, as: Card
   alias Pinochle.Hand, as: Hand
+  alias Pinochle.Trick, as: Trick
 
   @enforce_keys [:current_player, :hands]
   defstruct [:current_player, :hands]
@@ -31,4 +32,7 @@ defmodule Pinochle.Game do
   defp current_hand(%Game{current_player: current_player} = game) do
     game |> hand(current_player)
   end
+
+  @spec current_trick(game :: Game.t()) :: Trick.t() | nil
+  def current_trick(_game), do: nil
 end
