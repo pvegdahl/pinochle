@@ -4,13 +4,13 @@ defmodule Pinochle.Game do
   alias Pinochle.Hand, as: Hand
   alias Pinochle.Trick, as: Trick
 
-  @enforce_keys [:current_player, :hands, :tricks]
-  defstruct [:current_player, :hands, :tricks]
+  @enforce_keys [:current_player, :hands]
+  defstruct current_player: nil, hands: nil, tricks: []
 
   @type t :: %__MODULE__{current_player: 0..3, hands: [Hand.t()], tricks: [Trick.t()]}
 
   @spec new(starting_player :: 0..3) :: Game.t()
-  def new(starting_player), do: %Game{current_player: starting_player, hands: Hand.deal(), tricks: []}
+  def new(starting_player), do: %Game{current_player: starting_player, hands: Hand.deal()}
 
   @spec current_player(game :: Game.t()) :: 0..3
   def current_player(%Game{current_player: current_player}), do: current_player

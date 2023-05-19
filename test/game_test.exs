@@ -27,7 +27,7 @@ defmodule GameTest do
       |> Enum.sort_by(fn card -> card.suit end)
       |> Enum.chunk_every(12)
 
-    %Game{current_player: starting_player, hands: hands, tricks: []}
+    %Game{current_player: starting_player, hands: hands}
   end
 
   test "Player 3 playing a card wraps back to player 0" do
@@ -64,7 +64,7 @@ defmodule GameTest do
       [Card.new(:jack, :diamonds)]
     ]
 
-    game = %Game{current_player: 2, hands: hands, tricks: []}
+    game = %Game{current_player: 2, hands: hands}
 
     updated_game = Game.play_card(game, Card.new(:jack, :diamonds))
 
