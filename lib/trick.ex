@@ -42,5 +42,5 @@ defmodule Pinochle.Trick do
     |> Integer.mod(4)
   end
 
-  def cards(%Trick{cards: cards}), do: cards |> Enum.reverse()
+  def cards(%Trick{cards: cards}), do: cards
 end
