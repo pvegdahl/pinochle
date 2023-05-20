@@ -31,6 +31,7 @@ defmodule Pinochle.Game do
     %Game{game | current_player: new_current_player, hands: new_hands, trick: new_trick}
   end
 
+  @spec current_hand(game :: Game.t()) :: Hand.t()
   defp current_hand(%Game{current_player: current_player} = game) do
     game |> hand(current_player)
   end
