@@ -89,10 +89,11 @@ defmodule GameTest do
   test "Playing another card updates the existing trick" do
     game = sorted_game(3) |> Game.play_card(Card.new(:nine, :spades))
 
-    trick_cards = game
-    |> Game.play_card(Card.new(:ten, :clubs))
-    |> Game.current_trick()
-    |> Trick.cards()
+    trick_cards =
+      game
+      |> Game.play_card(Card.new(:ten, :clubs))
+      |> Game.current_trick()
+      |> Trick.cards()
 
     assert trick_cards == [Card.new(:nine, :spades), Card.new(:ten, :clubs)]
   end
