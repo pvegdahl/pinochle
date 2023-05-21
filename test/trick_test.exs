@@ -95,8 +95,10 @@ defmodule TrickTest do
   end
 
   test "A trick is complete with 4 played cards" do
-    trick = Enum.reduce(0..2, Trick.new(0, a_card()), fn _, acc -> Trick.play_card(acc, a_card()) end)
+    assert Trick.complete?(trick_with_n_cards(4))
+  end
 
-    assert Trick.complete?(trick)
+  defp trick_with_n_cards(n) do
+    Enum.reduce(1..n, Trick.new(0, a_card()), fn _, acc -> Trick.play_card(acc, a_card()) end)
   end
 end
