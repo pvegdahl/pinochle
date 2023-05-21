@@ -48,5 +48,5 @@ defmodule Pinochle.Trick do
 
   def cards(%Trick{cards: cards}), do: cards
 
-  def complete?(_trick), do: true
+  def complete?(%Trick{cards: cards}), do: Enum.count(cards) == 4
 end
