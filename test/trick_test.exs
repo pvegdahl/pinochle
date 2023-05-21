@@ -52,12 +52,12 @@ defmodule TrickTest do
   end
 
   test "Only trump wins against others" do
-    first = Card.new(:king, :hearts)
-    second = Card.new(:nine, :clubs)
-    third = Card.new(:ten, :hearts)
+    trick =
+      Trick.new(0, Card.new(:king, :hearts))
+      |> Trick.play_card(Card.new(:nine, :clubs))
+      |> Trick.play_card(Card.new(:ten, :hearts))
 
-    assert Trick.new(0, first) |> Trick.play_card(second) |> Trick.play_card(third) |> Trick.winning_card(:clubs) ==
-             second
+    assert Trick.winning_card(trick, :clubs) == Card.new(:nine, :clubs)
   end
 
   test "Get winning player when first player wins" do
@@ -107,5 +107,4 @@ defmodule TrickTest do
     assert not Trick.complete?(trick_with_n_cards(2))
     assert not Trick.complete?(trick_with_n_cards(3))
   end
-
 end
