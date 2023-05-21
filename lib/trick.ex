@@ -18,6 +18,10 @@ defmodule Pinochle.Trick do
 
   @spec play_card(trick :: Trick.t(), card :: Card.t()) :: Trick.t()
   def play_card(%Trick{cards: cards} = trick, card) do
+    # Although it is inefficient to construct the list like this, I'm intentionally doing it this way because:
+    #   1) Every time we process the list, we need it in this order, so this avoids a bunch of calls to Enum.reverse.
+    #   2) The list maxes out at size 4, so it's not particularly problematic anyway
+    #   3) An in-order list is more intuitive (and thus less error prone) than a reverse-order list
     %Trick{trick | cards: cards ++ [card]}
   end
 
