@@ -29,18 +29,21 @@ defmodule Pinochle.Game do
   end
 
   @spec play_card(game :: Game.t(), card :: Card.t()) :: Game.t()
-  def play_card(%Game{hands: hands} = game, card) do
+  def play_card(game, card) do
+    game
+    |> update_hand(card)
+    |> update_trick(card)
+  end
+
+  @spec update_hand(game :: Game.t(), card :: Card.t()) :: Game.t()
+  defp update_hand(%Game{hands: hands} = game, card) do
     current_player = Game.current_player(game)
     new_hand = current_hand(game) |> Hand.remove_card(card)
-    new_hands = List.replace_at(hands, current_player, new_hand)
-
-    updated_game = update_trick(game, card)
-
-    %Game{updated_game | hands: new_hands}
+    %Game{game | hands: List.replace_at(hands, current_player, new_hand)}
   end
 
   @spec update_trick(game :: Game.t(), card :: Card.t()) :: Game.t()
-  defp update_trick(%Game{ trick: nil, starting_player: starting_player} = game, card) do
+  defp update_trick(%Game{trick: nil, starting_player: starting_player} = game, card) do
     %Game{game | trick: Trick.new(starting_player, card)}
   end
 

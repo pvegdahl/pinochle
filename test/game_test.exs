@@ -118,6 +118,7 @@ defmodule GameTest do
       |> Game.play_card(Card.new(:nine, :spades))
 
     updated_game = game |> Game.play_card(Card.new(:ace, :spades))
+
     trick_cards =
       updated_game
       |> Game.current_trick()
@@ -129,7 +130,5 @@ end
 
 # TODO
 # - play_card
-#   + Update the trick
-#     ~ End of trick
 #   + Don't allow if the card isn't playable.
-#   +
+# - Score all tricks
