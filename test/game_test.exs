@@ -98,16 +98,16 @@ defmodule GameTest do
     assert trick_cards == [Card.new(:nine, :spades), Card.new(:ten, :clubs)]
   end
 
-  #  test "When a trick is done, then the next player is the player who one the trick" do
-  #    game =
-  #      sorted_game(0, :spades)
-  #      |> Game.play_card(Card.new(:ace, :clubs))
-  #      |> Game.play_card(Card.new(:nine, :diamonds))
-  #      |> Game.play_card(Card.new(:nine, :hearts))
-  #      |> Game.play_card(Card.new(:nine, :spades))
-  #
-  #      assert Game.current_player(game) == 3
-  #  end
+  test "When a trick is done, then the next player is the player who one the trick" do
+    game =
+      sorted_game(0, :spades)
+      |> Game.play_card(Card.new(:ace, :clubs))
+      |> Game.play_card(Card.new(:nine, :diamonds))
+      |> Game.play_card(Card.new(:nine, :hearts))
+      |> Game.play_card(Card.new(:nine, :spades))
+
+    assert Game.current_player(game) == 3
+  end
 end
 
 # TODO

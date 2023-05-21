@@ -14,7 +14,14 @@ defmodule Pinochle.Game do
 
   @spec current_player(game :: Game.t()) :: 0..3
   def current_player(%Game{starting_player: starting_player, trick: nil}), do: starting_player
-  def current_player(%Game{trick: trick}), do: Trick.current_player(trick)
+
+  def current_player(%Game{trick: trick, trump: trump}) do
+    if Trick.complete?(trick) do
+      Trick.winning_player(trick, trump)
+    else
+      Trick.current_player(trick)
+    end
+  end
 
   @spec hand(game :: Game.t(), player :: 0..3) :: Hand.t()
   def hand(%Game{hands: hands}, player) do
