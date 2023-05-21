@@ -27,7 +27,7 @@ defmodule GameTest do
       |> Enum.sort_by(fn card -> card.suit end)
       |> Enum.chunk_every(12)
 
-    %Game{current_player: starting_player, starting_player: starting_player, hands: hands, trump: trump}
+    %Game{starting_player: starting_player, hands: hands, trump: trump}
   end
 
   test "Player 3 playing a card wraps back to player 0" do
@@ -64,7 +64,7 @@ defmodule GameTest do
       [Card.new(:jack, :diamonds)]
     ]
 
-    game = %Game{current_player: 2, starting_player: 2, hands: hands, trump: :diamonds}
+    game = %Game{starting_player: 2, hands: hands, trump: :diamonds}
 
     updated_game = Game.play_card(game, Card.new(:jack, :diamonds))
 
@@ -98,16 +98,16 @@ defmodule GameTest do
     assert trick_cards == [Card.new(:nine, :spades), Card.new(:ten, :clubs)]
   end
 
-#  test "When a trick is done, then the next player is the player who one the trick" do
-#    game =
-#      sorted_game(0, :spades)
-#      |> Game.play_card(Card.new(:ace, :clubs))
-#      |> Game.play_card(Card.new(:nine, :diamonds))
-#      |> Game.play_card(Card.new(:nine, :hearts))
-#      |> Game.play_card(Card.new(:nine, :spades))
-#
-#      assert Game.current_player(game) == 3
-#  end
+  #  test "When a trick is done, then the next player is the player who one the trick" do
+  #    game =
+  #      sorted_game(0, :spades)
+  #      |> Game.play_card(Card.new(:ace, :clubs))
+  #      |> Game.play_card(Card.new(:nine, :diamonds))
+  #      |> Game.play_card(Card.new(:nine, :hearts))
+  #      |> Game.play_card(Card.new(:nine, :spades))
+  #
+  #      assert Game.current_player(game) == 3
+  #  end
 end
 
 # TODO
