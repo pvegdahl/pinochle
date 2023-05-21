@@ -108,6 +108,23 @@ defmodule GameTest do
 
     assert Game.current_player(game) == 3
   end
+
+  test "A new trick replaces the last trick" do
+    game =
+      sorted_game(0, :spades)
+      |> Game.play_card(Card.new(:ace, :clubs))
+      |> Game.play_card(Card.new(:nine, :diamonds))
+      |> Game.play_card(Card.new(:nine, :hearts))
+      |> Game.play_card(Card.new(:nine, :spades))
+
+    updated_game = game |> Game.play_card(Card.new(:ace, :spades))
+    trick_cards =
+      updated_game
+      |> Game.current_trick()
+      |> Trick.cards()
+
+    assert trick_cards == [Card.new(:ace, :spades)]
+  end
 end
 
 # TODO

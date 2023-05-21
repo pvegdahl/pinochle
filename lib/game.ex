@@ -29,19 +29,29 @@ defmodule Pinochle.Game do
   end
 
   @spec play_card(game :: Game.t(), card :: Card.t()) :: Game.t()
-  def play_card(%Game{starting_player: starting_player, hands: hands, trick: trick} = game, card) do
+  def play_card(%Game{hands: hands} = game, card) do
     current_player = Game.current_player(game)
     new_hand = current_hand(game) |> Hand.remove_card(card)
     new_hands = List.replace_at(hands, current_player, new_hand)
 
-    new_trick = update_trick(trick, starting_player, card)
+    updated_game = update_trick(game, card)
 
-    %Game{game | hands: new_hands, trick: new_trick}
+    %Game{updated_game | hands: new_hands}
   end
 
-  @spec update_trick(trick :: Trick.t(), current_player :: 0..3, card :: Card.t()) :: Trick.t()
-  defp update_trick(nil, starting_player, card), do: Trick.new(starting_player, card)
-  defp update_trick(trick, _starting_player, card), do: Trick.play_card(trick, card)
+  @spec update_trick(game :: Game.t(), card :: Card.t()) :: Game.t()
+  defp update_trick(%Game{ trick: nil, starting_player: starting_player} = game, card) do
+    %Game{game | trick: Trick.new(starting_player, card)}
+  end
+
+  defp update_trick(%Game{trick: trick, trump: trump} = game, card) do
+    if Trick.complete?(trick) do
+      winning_player = Trick.winning_player(trick, trump)
+      %Game{game | trick: Trick.new(winning_player, card)}
+    else
+      %Game{game | trick: Trick.play_card(trick, card)}
+    end
+  end
 
   @spec current_hand(game :: Game.t()) :: Hand.t()
   defp current_hand(%Game{} = game), do: game |> hand(Game.current_player(game))
