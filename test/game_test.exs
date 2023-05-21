@@ -6,11 +6,11 @@ defmodule GameTest do
   alias Pinochle.Trick, as: Trick
 
   test "A new game has current player" do
-    0..3 |> Enum.each(fn n -> assert Game.new(n) |> Game.current_player() == n end)
+    0..3 |> Enum.each(fn n -> assert Game.new(n, :hearts) |> Game.current_player() == n end)
   end
 
   test "A new game has a 12 card hand for each player" do
-    game = Game.new(0)
+    game = Game.new(0, :hearts)
     0..3 |> Enum.each(fn n -> assert Game.hand(game, n) |> Enum.count() == 12 end)
   end
 
@@ -20,14 +20,14 @@ defmodule GameTest do
     assert Game.current_player(game) == 1
   end
 
-  defp sorted_game(starting_player) do
+  defp sorted_game(starting_player, trump \\ :clubs) do
     # Each player will have all cards of one suit: clubs, diamonds, hearts, spades
     hands =
       Card.deck()
       |> Enum.sort_by(fn card -> card.suit end)
       |> Enum.chunk_every(12)
 
-    %Game{current_player: starting_player, hands: hands}
+    %Game{current_player: starting_player, starting_player: starting_player, hands: hands, trump: trump}
   end
 
   test "Player 3 playing a card wraps back to player 0" do
@@ -64,7 +64,7 @@ defmodule GameTest do
       [Card.new(:jack, :diamonds)]
     ]
 
-    game = %Game{current_player: 2, hands: hands}
+    game = %Game{current_player: 2, starting_player: 2, hands: hands, trump: :diamonds}
 
     updated_game = Game.play_card(game, Card.new(:jack, :diamonds))
 
@@ -75,7 +75,7 @@ defmodule GameTest do
   end
 
   test "A new game does not have a current trick" do
-    assert Game.new(0) |> Game.current_trick() == nil
+    assert Game.new(0, :hearts) |> Game.current_trick() == nil
   end
 
   test "Playing the first card of the game creates a new trick" do
@@ -97,6 +97,17 @@ defmodule GameTest do
 
     assert trick_cards == [Card.new(:nine, :spades), Card.new(:ten, :clubs)]
   end
+
+#  test "When a trick is done, then the next player is the player who one the trick" do
+#    game =
+#      sorted_game(0, :spades)
+#      |> Game.play_card(Card.new(:ace, :clubs))
+#      |> Game.play_card(Card.new(:nine, :diamonds))
+#      |> Game.play_card(Card.new(:nine, :hearts))
+#      |> Game.play_card(Card.new(:nine, :spades))
+#
+#      assert Game.current_player(game) == 3
+#  end
 end
 
 # TODO
