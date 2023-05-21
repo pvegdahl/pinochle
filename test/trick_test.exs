@@ -93,4 +93,10 @@ defmodule TrickTest do
 
     assert Trick.winning_player(trick, :hearts) == 3
   end
+
+  test "A trick is complete with 4 played cards" do
+    trick = Enum.reduce(0..2, Trick.new(0, a_card()), fn _, acc -> Trick.play_card(acc, a_card()) end)
+
+    assert Trick.complete?(trick)
+  end
 end

@@ -47,4 +47,6 @@ defmodule Pinochle.Trick do
   end
 
   def cards(%Trick{cards: cards}), do: cards
+
+  def complete?(_trick), do: true
 end
