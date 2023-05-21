@@ -99,7 +99,7 @@ defmodule TrickTest do
   end
 
   defp trick_with_n_cards(n) do
-    Enum.reduce(2..n//1, Trick.new(0, a_card()), fn _, acc -> Trick.play_card(acc, a_card()) end)
+    Trick.new(0, a_card()) |> play_n_cards(n-1)
   end
 
   test "A trick is not complete with less than 4 cards" do
