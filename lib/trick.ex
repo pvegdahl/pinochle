@@ -46,7 +46,9 @@ defmodule Pinochle.Trick do
     |> Integer.mod(4)
   end
 
+  @spec cards(trick :: Trick.t()) :: [Card.t()]
   def cards(%Trick{cards: cards}), do: cards
 
+  @spec complete?(trick :: Trick.t()) :: boolean()
   def complete?(%Trick{cards: cards}), do: Enum.count(cards) == 4
 end
