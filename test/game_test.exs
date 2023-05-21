@@ -102,7 +102,6 @@ end
 # TODO
 # - play_card
 #   + Update the trick
-#     ~ Middle of trick
 #     ~ End of trick
 #   + Don't allow if the card isn't playable.
 #   +
