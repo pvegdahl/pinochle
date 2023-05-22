@@ -17,6 +17,7 @@ defmodule Pinochle.Game do
 
   def current_player(%Game{trump: trump} = game) do
     trick = current_trick(game)
+
     if Trick.complete?(trick) do
       Trick.winning_player(trick, trump)
     else
@@ -44,13 +45,11 @@ defmodule Pinochle.Game do
   end
 
   @spec valid_play?(game :: Game.t(), card :: Card.t()) :: boolean()
-  def valid_play?(%Game{tricks: []}, _card), do: true
-
   def valid_play?(%Game{trump: trump} = game, card) do
-    trick = current_trick(game)
-    if Trick.complete?(trick) do
+    if new_trick?(game) do
       true
     else
+      trick = current_trick(game)
       winning_card = Trick.winning_card(trick, trump)
       led_suit = Trick.led_suit(trick)
 
@@ -60,6 +59,10 @@ defmodule Pinochle.Game do
     end
   end
 
+  @spec new_trick?(game :: Game.t()) :: boolean()
+  defp new_trick?(%Game{tricks: []}), do: true
+  defp new_trick?(%Game{tricks: [head_trick | _]}), do: Trick.complete?(head_trick)
+
   @spec update_hand(game :: Game.t(), card :: Card.t()) :: Game.t()
   defp update_hand(%Game{hands: hands} = game, card) do
     current_player = Game.current_player(game)
@@ -68,20 +71,23 @@ defmodule Pinochle.Game do
   end
 
   @spec update_trick(game :: Game.t(), card :: Card.t()) :: Game.t()
-  defp update_trick(%Game{tricks: [], starting_player: starting_player} = game, card) do
-    new_trick = Trick.new(starting_player, card)
-    %Game{game | tricks: [new_trick]}
+  defp update_trick(%Game{tricks: []} = game, card) do
+    update_game_with_new_trick(game, card)
   end
 
   defp update_trick(%Game{tricks: [head_trick | rest_tricks] = tricks, trump: trump} = game, card) do
-    if Trick.complete?(head_trick) do
-      winning_player = Trick.winning_player(head_trick, trump)
-      new_trick = Trick.new(winning_player, card)
-      %Game{game | tricks: [new_trick | tricks]}
+    if new_trick?(game) do
+      update_game_with_new_trick(game, card)
     else
       new_trick = Trick.play_card(head_trick, card)
       %Game{game | tricks: [new_trick | rest_tricks]}
     end
+  end
+
+  defp update_game_with_new_trick(%Game{tricks: tricks} = game, card) do
+    current_player = current_player(game)
+    new_trick = Trick.new(current_player, card)
+    %Game{game | tricks: [new_trick | tricks]}
   end
 
   @spec current_hand(game :: Game.t()) :: Hand.t()

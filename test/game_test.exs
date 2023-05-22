@@ -156,12 +156,13 @@ defmodule GameTest do
       [a_card(), a_card()]
     ]
 
-    trick = create_trick(0, [
-      Card.new(:ten, :spades),
-      Card.new(:nine, :spades),
-      Card.new(:jack, :spades),
-      Card.new(:queen, :spades),
-    ])
+    trick =
+      create_trick(0, [
+        Card.new(:ten, :spades),
+        Card.new(:nine, :spades),
+        Card.new(:jack, :spades),
+        Card.new(:queen, :spades)
+      ])
 
     game = %Game{starting_player: 0, hands: hands, tricks: [trick], trump: :spades}
 
@@ -176,10 +177,30 @@ defmodule GameTest do
 
   test "Score all tricks and assign points" do
     tricks = [
-      create_trick(3, [Card.new(:ace, :diamonds), Card.new(:nine, :spades), Card.new(:ten, :hearts), Card.new(:king, :hearts)]),
-      create_trick(3, [Card.new(:ace, :hearts), Card.new(:nine, :hearts), Card.new(:king, :hearts), Card.new(:queen, :hearts)]),
-      create_trick(0, [Card.new(:nine, :spades), Card.new(:queen, :spades), Card.new(:king, :spades), Card.new(:ten, :spades)]),
-      create_trick(0, [Card.new(:ten, :spades), Card.new(:nine, :spades), Card.new(:jack, :spades), Card.new(:queen, :spades)]),
+      create_trick(3, [
+        Card.new(:ace, :diamonds),
+        Card.new(:nine, :spades),
+        Card.new(:ten, :hearts),
+        Card.new(:king, :hearts)
+      ]),
+      create_trick(3, [
+        Card.new(:ace, :hearts),
+        Card.new(:nine, :hearts),
+        Card.new(:king, :hearts),
+        Card.new(:queen, :hearts)
+      ]),
+      create_trick(0, [
+        Card.new(:nine, :spades),
+        Card.new(:queen, :spades),
+        Card.new(:king, :spades),
+        Card.new(:ten, :spades)
+      ]),
+      create_trick(0, [
+        Card.new(:ten, :spades),
+        Card.new(:nine, :spades),
+        Card.new(:jack, :spades),
+        Card.new(:queen, :spades)
+      ])
     ]
 
     game = %Game{starting_player: 0, tricks: tricks, hands: [[], [], [], []], trump: :spades}
