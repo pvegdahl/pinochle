@@ -103,6 +103,7 @@ defmodule Pinochle.Game do
 
     tricks
     |> Enum.map(&score_and_assign_trick(&1, trump))
+    |> add_point_for_last_trick(tricks, trump)
     |> Enum.reduce(scores, fn {player, score}, acc -> Map.update!(acc, player, &(&1 + score)) end)
   end
 
@@ -110,5 +111,14 @@ defmodule Pinochle.Game do
     winning_player = Trick.winning_player(trick, trump)
     score = Trick.score(trick)
     {winning_player, score}
+  end
+
+  defp add_point_for_last_trick(player_scores, [head_trick | _rest_tricks] = tricks, trump) do
+    if Enum.count(tricks) == 12 do
+      winning_player = Trick.winning_player(head_trick, trump)
+      [{winning_player, 1} | player_scores]
+    else
+      player_scores
+    end
   end
 end
