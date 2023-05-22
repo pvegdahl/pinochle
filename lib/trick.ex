@@ -51,4 +51,7 @@ defmodule Pinochle.Trick do
 
   @spec complete?(trick :: Trick.t()) :: boolean()
   def complete?(%Trick{cards: cards}), do: Enum.count(cards) == 4
+
+  @spec led_suit(trick :: Trick.t()) :: Card.suit()
+  def led_suit(%Trick{cards: [%Card{suit: suit} | _]}), do: suit
 end

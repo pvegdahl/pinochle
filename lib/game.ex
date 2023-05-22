@@ -30,9 +30,25 @@ defmodule Pinochle.Game do
 
   @spec play_card(game :: Game.t(), card :: Card.t()) :: Game.t()
   def play_card(game, card) do
-    game
-    |> update_hand(card)
-    |> update_trick(card)
+    if valid_play?(game, card) do
+      game
+      |> update_hand(card)
+      |> update_trick(card)
+    else
+      {:error, :invalid_card}
+    end
+  end
+
+  @spec valid_play?(game :: Game.t(), card :: Card.t()) :: boolean()
+  def valid_play?(%Game{trick: nil}, _card), do: true
+
+  def valid_play?(%Game{trump: trump, trick: trick} = game, card) do
+    winning_card = Trick.winning_card(trick, trump)
+    led_suit = Trick.led_suit(trick)
+
+    current_hand(game)
+    |> Hand.playable(winning_card, led_suit, trump)
+    |> Enum.find(false, &(&1 == card))
   end
 
   @spec update_hand(game :: Game.t(), card :: Card.t()) :: Game.t()

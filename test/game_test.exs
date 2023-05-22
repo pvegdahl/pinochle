@@ -126,9 +126,22 @@ defmodule GameTest do
 
     assert trick_cards == [Card.new(:ace, :spades)]
   end
+
+  test "Don't allow playing an unplayable card" do
+    hands = [
+      [a_card()],
+      [Card.new(:jack, :spades), Card.new(:ace, :spades)],
+      [a_card(), a_card()],
+      [a_card(), a_card()]
+    ]
+
+    game = %Game{starting_player: 0, hands: hands, trick: Trick.new(0, Card.new(:ten, :spades)), trump: :spades}
+
+    assert Game.play_card(game, Card.new(:jack, :spades)) == {:error, :invalid_card}
+  end
+
+  defp a_card(), do: Card.new(:queen, :hearts)
 end
 
 # TODO
-# - play_card
-#   + Don't allow if the card isn't playable.
 # - Score all tricks

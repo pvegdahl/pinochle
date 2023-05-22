@@ -26,7 +26,9 @@ defmodule Pinochle.Hand do
     cards ++ hand
   end
 
-  @spec playable(hand :: Hand.t(), winning_card :: Card.t(), led_suit :: Card.suit(), trump :: Card.suit()) :: Hand.t()
+  @spec playable(hand :: Hand.t(), winning_card :: Card.t(), led_suit :: Card.suit(), trump :: Card.suit()) :: [
+          Card.t()
+        ]
   def playable(hand, winning_card, led_suit, trump) do
     hand
     |> candidate_cards(led_suit)
