@@ -75,7 +75,7 @@ defmodule Pinochle.Game do
     update_game_with_new_trick(game, card)
   end
 
-  defp update_trick(%Game{tricks: [head_trick | rest_tricks] = tricks, trump: trump} = game, card) do
+  defp update_trick(%Game{tricks: [head_trick | rest_tricks]} = game, card) do
     if new_trick?(game) do
       update_game_with_new_trick(game, card)
     else
