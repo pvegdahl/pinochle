@@ -141,7 +141,7 @@ defmodule GameTest do
       [a_card(), a_card()]
     ]
 
-    game = %Game{starting_player: 0, hands: hands, trick: Trick.new(0, Card.new(:ten, :spades)), trump: :spades}
+    game = %Game{starting_player: 0, hands: hands, tricks: [Trick.new(0, Card.new(:ten, :spades))], trump: :spades}
 
     assert Game.play_card(game, Card.new(:jack, :spades)) == {:error, :invalid_card}
   end
@@ -163,7 +163,7 @@ defmodule GameTest do
       Card.new(:queen, :spades),
     ])
 
-    game = %Game{starting_player: 0, hands: hands, trick: trick, tricks: [trick], trump: :spades}
+    game = %Game{starting_player: 0, hands: hands, tricks: [trick], trump: :spades}
 
     assert Game.play_card(game, Card.new(:jack, :spades)) |> elem(0) == :ok
   end
@@ -183,8 +183,11 @@ defmodule GameTest do
     ]
 
     game = %Game{starting_player: 0, tricks: tricks, hands: [[], [], [], []], trump: :spades}
+
+    # TODO assert
   end
 end
 
 # TODO
+# - Even on a fresh trick, you can only play cards in your hand
 # - Score all tricks
