@@ -96,4 +96,19 @@ defmodule Pinochle.Game do
   @spec current_trick(game :: Game.t()) :: Trick.t() | nil
   def current_trick(%Game{tricks: []}), do: nil
   def current_trick(%Game{tricks: [head_trick | _]}), do: head_trick
+
+  @spec score_tricks(game :: Game.t()) :: %{(0..3) => 0..25}
+  def score_tricks(%Game{tricks: tricks, trump: trump}) do
+    scores = %{0 => 0, 1 => 0, 2 => 0, 3 => 0}
+
+    tricks
+    |> Enum.map(&score_and_assign_trick(&1, trump))
+    |> Enum.reduce(scores, fn {player, score}, acc -> Map.update!(acc, player, &(&1 + score)) end)
+  end
+
+  defp score_and_assign_trick(trick, trump) do
+    winning_player = Trick.winning_player(trick, trump)
+    score = Trick.score(trick)
+    {winning_player, score}
+  end
 end

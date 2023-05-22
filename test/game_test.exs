@@ -198,17 +198,17 @@ defmodule GameTest do
       create_trick(0, [
         Card.new(:ten, :spades),
         Card.new(:nine, :spades),
-        Card.new(:jack, :spades),
+        Card.new(:king, :spades),
         Card.new(:queen, :spades)
       ])
     ]
 
     game = %Game{starting_player: 0, tricks: tricks, hands: [[], [], [], []], trump: :spades}
 
-    # TODO assert
+    assert Game.score_tricks(game) == %{0 => 5, 1 => 0, 2 => 0, 3 => 4}
   end
 end
 
 # TODO
 # - Even on a fresh trick, you can only play cards in your hand
-# - Score all tricks
+# - When scoring, add a point for last trick
