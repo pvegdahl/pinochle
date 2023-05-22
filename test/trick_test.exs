@@ -113,6 +113,16 @@ defmodule TrickTest do
     assert Trick.score(trick) == 3
   end
 
+  test "The score of a trick also includes all tens" do
+    trick = create_trick([Card.new(:ten, :hearts), Card.new(:ten, :hearts), Card.new(:nine, :clubs), Card.new(:queen, :hearts)])
+    assert Trick.score(trick) == 2
+  end
+
+  test "The score of a trick also includes all kings" do
+    trick = create_trick([Card.new(:queen, :hearts), Card.new(:queen, :spades), Card.new(:king, :clubs), Card.new(:jack, :diamonds)])
+    assert Trick.score(trick) == 1
+  end
+
   defp create_trick([head_card | rest_cards]) do
     trick = Trick.new(0, head_card)
     Enum.reduce(rest_cards, trick, fn card, acc -> Trick.play_card(acc, card) end)

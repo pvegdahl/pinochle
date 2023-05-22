@@ -56,8 +56,10 @@ defmodule Pinochle.Trick do
   def led_suit(%Trick{cards: [%Card{suit: suit} | _]}), do: suit
 
   def score(%Trick{cards: cards}) do
+    point_cards = MapSet.new([:ace, :ten, :king])
+
     cards
-    |> Enum.filter(fn %Card{rank: rank} -> rank == :ace end)
+    |> Enum.filter(&MapSet.member?(point_cards, &1.rank))
     |> Enum.count()
   end
 end
