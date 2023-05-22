@@ -147,6 +147,25 @@ defmodule GameTest do
   end
 
   defp a_card(), do: Card.new(:queen, :hearts)
+
+  test "Any card is playable on a new trick" do
+    hands = [
+      [Card.new(:jack, :spades), Card.new(:ace, :spades)],
+      [a_card(), a_card()],
+      [a_card(), a_card()],
+      [a_card(), a_card()]
+    ]
+
+    trick =
+      Trick.new(0, Card.new(:ten, :spades))
+      |> Trick.play_card(Card.new(:nine, :spades))
+      |> Trick.play_card(Card.new(:jack, :spades))
+      |> Trick.play_card(Card.new(:queen, :spades))
+
+    game = %Game{starting_player: 0, hands: hands, trick: trick, trump: :spades}
+
+    assert Game.play_card(game, Card.new(:jack, :spades)) |> elem(0) == :ok
+  end
 end
 
 # TODO
