@@ -54,4 +54,10 @@ defmodule Pinochle.Trick do
 
   @spec led_suit(trick :: Trick.t()) :: Card.suit()
   def led_suit(%Trick{cards: [%Card{suit: suit} | _]}), do: suit
+
+  def score(%Trick{cards: cards}) do
+    cards
+    |> Enum.filter(fn %Card{rank: rank} -> rank == :ace end)
+    |> Enum.count()
+  end
 end

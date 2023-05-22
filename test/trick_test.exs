@@ -107,4 +107,14 @@ defmodule TrickTest do
     assert not Trick.complete?(trick_with_n_cards(2))
     assert not Trick.complete?(trick_with_n_cards(3))
   end
+
+  test "The score of a trick includes all aces" do
+    trick = create_trick([Card.new(:ace, :hearts), Card.new(:jack, :hearts), Card.new(:ace, :clubs), Card.new(:ace, :hearts)])
+    assert Trick.score(trick) == 3
+  end
+
+  defp create_trick([head_card | rest_cards]) do
+    trick = Trick.new(0, head_card)
+    Enum.reduce(rest_cards, trick, fn card, acc -> Trick.play_card(acc, card) end)
+  end
 end
