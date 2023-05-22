@@ -15,7 +15,7 @@ defmodule GameTest do
   end
 
   test "A player playing a card increments to the next player" do
-    game = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
+    {:ok, game} = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
 
     assert Game.current_player(game) == 1
   end
@@ -31,13 +31,13 @@ defmodule GameTest do
   end
 
   test "Player 3 playing a card wraps back to player 0" do
-    game = sorted_game(3) |> Game.play_card(Card.new(:king, :spades))
+    {:ok, game} = sorted_game(3) |> Game.play_card(Card.new(:king, :spades))
 
     assert Game.current_player(game) == 0
   end
 
   test "A player playing a card removes it from their hand" do
-    game = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
+    {:ok, game} = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
 
     assert Game.hand(game, 0) |> Enum.sort() ==
              [
@@ -66,7 +66,7 @@ defmodule GameTest do
 
     game = %Game{starting_player: 2, hands: hands, trump: :diamonds}
 
-    updated_game = Game.play_card(game, Card.new(:jack, :diamonds))
+    {:ok, updated_game} = Game.play_card(game, Card.new(:jack, :diamonds))
 
     assert Game.hand(updated_game, 0) == [Card.new(:jack, :diamonds)]
     assert Game.hand(updated_game, 1) == [Card.new(:jack, :diamonds)]
@@ -81,17 +81,18 @@ defmodule GameTest do
   test "Playing the first card of the game creates a new trick" do
     game = sorted_game(3)
 
-    updated_game = Game.play_card(game, Card.new(:nine, :spades))
+    {:ok, updated_game} = Game.play_card(game, Card.new(:nine, :spades))
 
     assert Game.current_trick(updated_game) == Trick.new(3, Card.new(:nine, :spades))
   end
 
   test "Playing another card updates the existing trick" do
-    game = sorted_game(3) |> Game.play_card(Card.new(:nine, :spades))
+    {:ok, game} = sorted_game(3) |> Game.play_card(Card.new(:nine, :spades))
+
+    {:ok, updated_game} = Game.play_card(game, Card.new(:ten, :clubs))
 
     trick_cards =
-      game
-      |> Game.play_card(Card.new(:ten, :clubs))
+      updated_game
       |> Game.current_trick()
       |> Trick.cards()
 
@@ -101,23 +102,28 @@ defmodule GameTest do
   test "When a trick is done, then the next player is the player who one the trick" do
     game =
       sorted_game(0, :spades)
-      |> Game.play_card(Card.new(:ace, :clubs))
-      |> Game.play_card(Card.new(:nine, :diamonds))
-      |> Game.play_card(Card.new(:nine, :hearts))
-      |> Game.play_card(Card.new(:nine, :spades))
+      |> play_card_helper(Card.new(:ace, :clubs))
+      |> play_card_helper(Card.new(:nine, :diamonds))
+      |> play_card_helper(Card.new(:nine, :hearts))
+      |> play_card_helper(Card.new(:nine, :spades))
 
     assert Game.current_player(game) == 3
+  end
+
+  defp play_card_helper(game, card) do
+    {:ok, updated_game} = Game.play_card(game, card)
+    updated_game
   end
 
   test "A new trick replaces the last trick" do
     game =
       sorted_game(0, :spades)
-      |> Game.play_card(Card.new(:ace, :clubs))
-      |> Game.play_card(Card.new(:nine, :diamonds))
-      |> Game.play_card(Card.new(:nine, :hearts))
-      |> Game.play_card(Card.new(:nine, :spades))
+      |> play_card_helper(Card.new(:ace, :clubs))
+      |> play_card_helper(Card.new(:nine, :diamonds))
+      |> play_card_helper(Card.new(:nine, :hearts))
+      |> play_card_helper(Card.new(:nine, :spades))
 
-    updated_game = game |> Game.play_card(Card.new(:ace, :spades))
+    {:ok, updated_game} = game |> Game.play_card(Card.new(:ace, :spades))
 
     trick_cards =
       updated_game

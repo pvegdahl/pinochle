@@ -28,12 +28,15 @@ defmodule Pinochle.Game do
     Enum.at(hands, player)
   end
 
-  @spec play_card(game :: Game.t(), card :: Card.t()) :: Game.t()
+  @spec play_card(game :: Game.t(), card :: Card.t()) :: {:ok, Game.t()} | {:error, atom()}
   def play_card(game, card) do
     if valid_play?(game, card) do
-      game
-      |> update_hand(card)
-      |> update_trick(card)
+      updated_game =
+        game
+        |> update_hand(card)
+        |> update_trick(card)
+
+      {:ok, updated_game}
     else
       {:error, :invalid_card}
     end
