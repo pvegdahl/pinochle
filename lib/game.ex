@@ -84,6 +84,7 @@ defmodule Pinochle.Game do
     end
   end
 
+  @spec update_game_with_new_trick(game :: Game.t(), card :: Card.t()) :: Game.t()
   defp update_game_with_new_trick(%Game{tricks: tricks} = game, card) do
     current_player = current_player(game)
     new_trick = Trick.new(current_player, card)
@@ -107,12 +108,16 @@ defmodule Pinochle.Game do
     |> Enum.reduce(scores, fn {player, score}, acc -> Map.update!(acc, player, &(&1 + score)) end)
   end
 
+  @spec score_and_assign_trick(trick :: Trick.t(), trump :: Card.suit()) :: {0..3, 0..4}
   defp score_and_assign_trick(trick, trump) do
     winning_player = Trick.winning_player(trick, trump)
     score = Trick.score(trick)
     {winning_player, score}
   end
 
+  @spec add_point_for_last_trick(player_scores :: [{0..3, 0..4}], tricks :: [Trick.t()], trump :: Card.suit()) :: [
+          {0..3, 0..4}
+        ]
   defp add_point_for_last_trick(player_scores, [head_trick | _rest_tricks] = tricks, trump) do
     if Enum.count(tricks) == 12 do
       winning_player = Trick.winning_player(head_trick, trump)

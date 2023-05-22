@@ -55,6 +55,7 @@ defmodule Pinochle.Trick do
   @spec led_suit(trick :: Trick.t()) :: Card.suit()
   def led_suit(%Trick{cards: [%Card{suit: suit} | _]}), do: suit
 
+  @spec score(trick :: Trick.t()) :: 0..4
   def score(%Trick{cards: cards}) do
     point_cards = MapSet.new([:ace, :ten, :king])
 
