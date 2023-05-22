@@ -109,18 +109,46 @@ defmodule TrickTest do
   end
 
   test "The score of a trick includes all aces" do
-    trick = create_trick([Card.new(:ace, :hearts), Card.new(:jack, :hearts), Card.new(:ace, :clubs), Card.new(:ace, :hearts)])
+    trick =
+      create_trick([Card.new(:ace, :hearts), Card.new(:jack, :hearts), Card.new(:ace, :clubs), Card.new(:ace, :hearts)])
+
     assert Trick.score(trick) == 3
   end
 
   test "The score of a trick also includes all tens" do
-    trick = create_trick([Card.new(:ten, :hearts), Card.new(:ten, :hearts), Card.new(:nine, :clubs), Card.new(:queen, :hearts)])
+    trick =
+      create_trick([
+        Card.new(:ten, :hearts),
+        Card.new(:ten, :hearts),
+        Card.new(:nine, :clubs),
+        Card.new(:queen, :hearts)
+      ])
+
     assert Trick.score(trick) == 2
   end
 
   test "The score of a trick also includes all kings" do
-    trick = create_trick([Card.new(:queen, :hearts), Card.new(:queen, :spades), Card.new(:king, :clubs), Card.new(:jack, :diamonds)])
+    trick =
+      create_trick([
+        Card.new(:queen, :hearts),
+        Card.new(:queen, :spades),
+        Card.new(:king, :clubs),
+        Card.new(:jack, :diamonds)
+      ])
+
     assert Trick.score(trick) == 1
+  end
+
+  test "A mix of ace, ten, and king are all scored for points" do
+    trick =
+      create_trick([
+        Card.new(:king, :hearts),
+        Card.new(:ten, :hearts),
+        Card.new(:ace, :hearts),
+        Card.new(:king, :hearts)
+      ])
+
+    assert Trick.score(trick) == 4
   end
 
   defp create_trick([head_card | rest_cards]) do
