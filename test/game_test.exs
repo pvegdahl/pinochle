@@ -156,15 +156,33 @@ defmodule GameTest do
       [a_card(), a_card()]
     ]
 
-    trick =
-      Trick.new(0, Card.new(:ten, :spades))
-      |> Trick.play_card(Card.new(:nine, :spades))
-      |> Trick.play_card(Card.new(:jack, :spades))
-      |> Trick.play_card(Card.new(:queen, :spades))
+    trick = create_trick(0, [
+      Card.new(:ten, :spades),
+      Card.new(:nine, :spades),
+      Card.new(:jack, :spades),
+      Card.new(:queen, :spades),
+    ])
 
-    game = %Game{starting_player: 0, hands: hands, trick: trick, trump: :spades}
+    game = %Game{starting_player: 0, hands: hands, trick: trick, tricks: [trick], trump: :spades}
 
     assert Game.play_card(game, Card.new(:jack, :spades)) |> elem(0) == :ok
+  end
+
+  defp create_trick(starting_player, [first_card | rest_of_cards]) do
+    trick = Trick.new(starting_player, first_card)
+
+    Enum.reduce(rest_of_cards, trick, fn card, acc -> Trick.play_card(acc, card) end)
+  end
+
+  test "Score all tricks and assign points" do
+    tricks = [
+      create_trick(3, [Card.new(:ace, :diamonds), Card.new(:nine, :spades), Card.new(:ten, :hearts), Card.new(:king, :hearts)]),
+      create_trick(3, [Card.new(:ace, :hearts), Card.new(:nine, :hearts), Card.new(:king, :hearts), Card.new(:queen, :hearts)]),
+      create_trick(0, [Card.new(:nine, :spades), Card.new(:queen, :spades), Card.new(:king, :spades), Card.new(:ten, :spades)]),
+      create_trick(0, [Card.new(:ten, :spades), Card.new(:nine, :spades), Card.new(:jack, :spades), Card.new(:queen, :spades)]),
+    ]
+
+    game = %Game{starting_player: 0, tricks: tricks, hands: [[], [], [], []], trump: :spades}
   end
 end
 

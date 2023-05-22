@@ -5,7 +5,7 @@ defmodule Pinochle.Game do
   alias Pinochle.Trick, as: Trick
 
   @enforce_keys [:starting_player, :hands, :trump]
-  defstruct starting_player: nil, hands: nil, trick: nil, trump: nil
+  defstruct starting_player: nil, hands: nil, trick: nil, trump: nil, tricks: []
 
   @type t :: %__MODULE__{starting_player: 0..3, hands: [Hand.t()], trick: Trick.t() | nil}
 
@@ -66,16 +66,19 @@ defmodule Pinochle.Game do
   end
 
   @spec update_trick(game :: Game.t(), card :: Card.t()) :: Game.t()
-  defp update_trick(%Game{trick: nil, starting_player: starting_player} = game, card) do
-    %Game{game | trick: Trick.new(starting_player, card)}
+  defp update_trick(%Game{trick: nil, tricks: [], starting_player: starting_player} = game, card) do
+    new_trick = Trick.new(starting_player, card)
+    %Game{game | trick: new_trick, tricks: [new_trick]}
   end
 
-  defp update_trick(%Game{trick: trick, trump: trump} = game, card) do
+  defp update_trick(%Game{trick: trick, tricks: [head_trick | rest_tricks] = tricks, trump: trump} = game, card) do
     if Trick.complete?(trick) do
       winning_player = Trick.winning_player(trick, trump)
-      %Game{game | trick: Trick.new(winning_player, card)}
+      new_trick = Trick.new(winning_player, card)
+      %Game{game | trick: new_trick, tricks: [new_trick | tricks]}
     else
-      %Game{game | trick: Trick.play_card(trick, card)}
+      new_trick = Trick.play_card(trick, card)
+      %Game{game | trick: new_trick, tricks: [new_trick | rest_tricks]}
     end
   end
 
