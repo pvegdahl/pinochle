@@ -47,7 +47,8 @@ defmodule Pinochle.Game do
   @spec valid_play?(game :: Game.t(), card :: Card.t()) :: boolean()
   def valid_play?(%Game{trump: trump} = game, card) do
     if new_trick?(game) do
-      true
+      current_hand(game)
+      |> Enum.member?(card)
     else
       trick = current_trick(game)
       winning_card = Trick.winning_card(trick, trump)
@@ -55,7 +56,7 @@ defmodule Pinochle.Game do
 
       current_hand(game)
       |> Hand.playable(winning_card, led_suit, trump)
-      |> Enum.find(false, &(&1 == card))
+      |> Enum.member?(card)
     end
   end
 

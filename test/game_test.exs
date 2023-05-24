@@ -169,6 +169,33 @@ defmodule GameTest do
     assert Game.play_card(game, Card.new(:jack, :spades)) |> elem(0) == :ok
   end
 
+  test "Okay, a card not in hand is not playable even on a fresh game" do
+    game = sorted_game(0)
+
+    assert Game.play_card(game, Card.new(:king, :hearts)) == {:error, :invalid_card}
+  end
+
+  test "A card not in hand is also not playable on a fresh trick" do
+    hands = [
+      [Card.new(:jack, :spades), Card.new(:ace, :spades)],
+      [a_card(), a_card()],
+      [a_card(), a_card()],
+      [a_card(), a_card()]
+    ]
+
+    trick =
+      create_trick(0, [
+        Card.new(:ten, :spades),
+        Card.new(:nine, :spades),
+        Card.new(:jack, :spades),
+        Card.new(:queen, :spades)
+      ])
+
+    game = %Game{starting_player: 0, hands: hands, tricks: [trick], trump: :spades}
+
+    assert Game.play_card(game, Card.new(:king, :hearts)) == {:error, :invalid_card}
+  end
+
   defp create_trick(starting_player, [first_card | rest_of_cards]) do
     trick = Trick.new(starting_player, first_card)
 
