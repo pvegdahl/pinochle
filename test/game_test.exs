@@ -15,7 +15,7 @@ defmodule GameTest do
   end
 
   test "A player playing a card increments to the next player" do
-    {:ok, game} = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
+    {:ok, game} = sorted_game(0) |> Game.play_card(0, Card.new(:queen, :clubs))
 
     assert Game.current_player(game) == 1
   end
@@ -31,13 +31,13 @@ defmodule GameTest do
   end
 
   test "Player 3 playing a card wraps back to player 0" do
-    {:ok, game} = sorted_game(3) |> Game.play_card(Card.new(:king, :spades))
+    {:ok, game} = sorted_game(3) |> Game.play_card(3, Card.new(:king, :spades))
 
     assert Game.current_player(game) == 0
   end
 
   test "A player playing a card removes it from their hand" do
-    {:ok, game} = sorted_game(0) |> Game.play_card(Card.new(:queen, :clubs))
+    {:ok, game} = sorted_game(0) |> Game.play_card(0, Card.new(:queen, :clubs))
 
     assert Game.hand(game, 0) |> Enum.sort() ==
              [
@@ -66,7 +66,7 @@ defmodule GameTest do
 
     game = %Game{starting_player: 2, hands: hands, trump: :diamonds}
 
-    {:ok, updated_game} = Game.play_card(game, Card.new(:jack, :diamonds))
+    {:ok, updated_game} = Game.play_card(game, 2, Card.new(:jack, :diamonds))
 
     assert Game.hand(updated_game, 0) == [Card.new(:jack, :diamonds)]
     assert Game.hand(updated_game, 1) == [Card.new(:jack, :diamonds)]
@@ -81,15 +81,15 @@ defmodule GameTest do
   test "Playing the first card of the game creates a new trick" do
     game = sorted_game(3)
 
-    {:ok, updated_game} = Game.play_card(game, Card.new(:nine, :spades))
+    {:ok, updated_game} = Game.play_card(game, 3, Card.new(:nine, :spades))
 
     assert Game.current_trick(updated_game) == Trick.new(3, Card.new(:nine, :spades))
   end
 
   test "Playing another card updates the existing trick" do
-    {:ok, game} = sorted_game(3) |> Game.play_card(Card.new(:nine, :spades))
+    {:ok, game} = sorted_game(3) |> Game.play_card(3, Card.new(:nine, :spades))
 
-    {:ok, updated_game} = Game.play_card(game, Card.new(:ten, :clubs))
+    {:ok, updated_game} = Game.play_card(game, 0, Card.new(:ten, :clubs))
 
     trick_cards =
       updated_game
@@ -111,7 +111,8 @@ defmodule GameTest do
   end
 
   defp play_card_helper(game, card) do
-    {:ok, updated_game} = Game.play_card(game, card)
+    current_player = Game.current_player(game)
+    {:ok, updated_game} = Game.play_card(game, current_player, card)
     updated_game
   end
 
@@ -123,7 +124,7 @@ defmodule GameTest do
       |> play_card_helper(Card.new(:nine, :hearts))
       |> play_card_helper(Card.new(:nine, :spades))
 
-    {:ok, updated_game} = game |> Game.play_card(Card.new(:ace, :spades))
+    {:ok, updated_game} = game |> Game.play_card(0, Card.new(:ace, :spades))
 
     trick_cards =
       updated_game
@@ -143,7 +144,7 @@ defmodule GameTest do
 
     game = %Game{starting_player: 0, hands: hands, tricks: [Trick.new(0, Card.new(:ten, :spades))], trump: :spades}
 
-    assert Game.play_card(game, Card.new(:jack, :spades)) == {:error, :invalid_card}
+    assert Game.play_card(game, 1, Card.new(:jack, :spades)) == {:error, :invalid_card}
   end
 
   defp a_card(), do: Card.new(:queen, :hearts)
@@ -166,13 +167,13 @@ defmodule GameTest do
 
     game = %Game{starting_player: 0, hands: hands, tricks: [trick], trump: :spades}
 
-    assert Game.play_card(game, Card.new(:jack, :spades)) |> elem(0) == :ok
+    assert Game.play_card(game, 0, Card.new(:jack, :spades)) |> elem(0) == :ok
   end
 
   test "Okay, a card not in hand is not playable even on a fresh game" do
     game = sorted_game(0)
 
-    assert Game.play_card(game, Card.new(:king, :hearts)) == {:error, :invalid_card}
+    assert Game.play_card(game, 0, Card.new(:king, :hearts)) == {:error, :invalid_card}
   end
 
   test "A card not in hand is also not playable on a fresh trick" do
@@ -193,7 +194,7 @@ defmodule GameTest do
 
     game = %Game{starting_player: 0, hands: hands, tricks: [trick], trump: :spades}
 
-    assert Game.play_card(game, Card.new(:king, :hearts)) == {:error, :invalid_card}
+    assert Game.play_card(game, 0, Card.new(:king, :hearts)) == {:error, :invalid_card}
   end
 
   defp create_trick(starting_player, [first_card | rest_of_cards]) do
