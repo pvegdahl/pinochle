@@ -251,6 +251,3 @@ defmodule GameTest do
     assert Game.score_tricks(game) == %{0 => 0, 1 => 0, 2 => 25, 3 => 0}
   end
 end
-
-# TODO
-# - Even on a fresh trick, you can only play cards in your hand
