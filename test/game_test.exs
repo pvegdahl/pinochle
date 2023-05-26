@@ -123,11 +123,10 @@ defmodule GameTest do
       |> play_card_helper(Card.new(:nine, :diamonds))
       |> play_card_helper(Card.new(:nine, :hearts))
       |> play_card_helper(Card.new(:nine, :spades))
-
-    {:ok, updated_game} = game |> Game.play_card(0, Card.new(:ace, :spades))
+      |> play_card_helper(Card.new(:ace, :spades))
 
     trick_cards =
-      updated_game
+      game
       |> Game.current_trick()
       |> Trick.cards()
 
@@ -195,6 +194,14 @@ defmodule GameTest do
     game = %Game{starting_player: 0, hands: hands, tricks: [trick], trump: :spades}
 
     assert Game.play_card(game, 0, Card.new(:king, :hearts)) == {:error, :invalid_card}
+  end
+
+  test "A non-active player cannot play a card" do
+    game = sorted_game(0)
+
+    assert Game.play_card(game, 1, Card.new(:king, :diamonds)) == {:error, :inactive_player}
+    assert Game.play_card(game, 2, Card.new(:king, :hearts)) == {:error, :inactive_player}
+    assert Game.play_card(game, 3, Card.new(:king, :spades)) == {:error, :inactive_player}
   end
 
   defp create_trick(starting_player, [first_card | rest_of_cards]) do

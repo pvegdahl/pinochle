@@ -31,16 +31,27 @@ defmodule Pinochle.Game do
   end
 
   @spec play_card(game :: Game.t(), player :: 0..3, card :: Card.t()) :: {:ok, Game.t()} | {:error, atom()}
-  def play_card(game, _player, card) do
-    if valid_play?(game, card) do
-      updated_game =
-        game
-        |> update_hand(card)
-        |> update_trick(card)
+  def play_card(game, player, card) do
+    with :ok <- validate_player(game, player) do
+      if valid_play?(game, card) do
+        updated_game =
+          game
+          |> update_hand(card)
+          |> update_trick(card)
 
-      {:ok, updated_game}
+        {:ok, updated_game}
+      else
+        {:error, :invalid_card}
+      end
+    end
+  end
+
+  @spec validate_player(game :: Game.t(), player :: 0..3) :: :ok | {:error, :inactive_player}
+  defp validate_player(game, player) do
+    if player == current_player(game) do
+      :ok
     else
-      {:error, :invalid_card}
+      {:error, :inactive_player}
     end
   end
 
