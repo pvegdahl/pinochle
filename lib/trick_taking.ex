@@ -1,18 +1,18 @@
-defmodule Pinochle.Game do
-  alias Pinochle.{Game, Card, Hand, Trick}
+defmodule Pinochle.TrickTaking do
+  alias Pinochle.{TrickTaking, Card, Hand, Trick}
 
   @enforce_keys [:starting_player, :hands, :trump]
   defstruct starting_player: nil, hands: nil, trump: nil, tricks: []
 
   @type t :: %__MODULE__{starting_player: 0..3, hands: [Hand.t()], tricks: [Trick.t()]}
 
-  @spec new(starting_player :: 0..3, trump :: Card.suit()) :: Game.t()
-  def new(starting_player, trump), do: %Game{starting_player: starting_player, hands: Hand.deal(), trump: trump}
+  @spec new(starting_player :: 0..3, trump :: Card.suit()) :: TrickTaking.t()
+  def new(starting_player, trump), do: %TrickTaking{starting_player: starting_player, hands: Hand.deal(), trump: trump}
 
-  @spec current_player(game :: Game.t()) :: 0..3
-  def current_player(%Game{starting_player: starting_player, tricks: []}), do: starting_player
+  @spec current_player(game :: TrickTaking.t()) :: 0..3
+  def current_player(%TrickTaking{starting_player: starting_player, tricks: []}), do: starting_player
 
-  def current_player(%Game{trump: trump} = game) do
+  def current_player(%TrickTaking{trump: trump} = game) do
     trick = current_trick(game)
 
     if Trick.complete?(trick) do
@@ -22,12 +22,13 @@ defmodule Pinochle.Game do
     end
   end
 
-  @spec hand(game :: Game.t(), player :: 0..3) :: Hand.t()
-  def hand(%Game{hands: hands}, player) do
+  @spec hand(game :: TrickTaking.t(), player :: 0..3) :: Hand.t()
+  def hand(%TrickTaking{hands: hands}, player) do
     Enum.at(hands, player)
   end
 
-  @spec play_card(game :: Game.t(), player :: 0..3, card :: Card.t()) :: {:ok, Game.t()} | {:error, atom()}
+  @spec play_card(game :: TrickTaking.t(), player :: 0..3, card :: Card.t()) ::
+          {:ok, TrickTaking.t()} | {:error, atom()}
   def play_card(game, player, card) do
     with(
       :ok <- validate_player(game, player),
@@ -42,7 +43,7 @@ defmodule Pinochle.Game do
     end
   end
 
-  @spec validate_player(game :: Game.t(), player :: 0..3) :: :ok | {:error, :inactive_player}
+  @spec validate_player(game :: TrickTaking.t(), player :: 0..3) :: :ok | {:error, :inactive_player}
   defp validate_player(game, player) do
     if player == current_player(game) do
       :ok
@@ -51,7 +52,7 @@ defmodule Pinochle.Game do
     end
   end
 
-  @spec validate_play(game :: Game.t(), card :: Card.t()) :: :ok | {:error, :invalid_card}
+  @spec validate_play(game :: TrickTaking.t(), card :: Card.t()) :: :ok | {:error, :invalid_card}
   def validate_play(game, card) do
     if valid_play?(game, card) do
       :ok
@@ -60,8 +61,8 @@ defmodule Pinochle.Game do
     end
   end
 
-  @spec valid_play?(game :: Game.t(), card :: Card.t()) :: boolean()
-  def valid_play?(%Game{trump: trump} = game, card) do
+  @spec valid_play?(game :: TrickTaking.t(), card :: Card.t()) :: boolean()
+  def valid_play?(%TrickTaking{trump: trump} = game, card) do
     if new_trick?(game) do
       current_hand(game)
       |> Enum.member?(card)
@@ -76,47 +77,47 @@ defmodule Pinochle.Game do
     end
   end
 
-  @spec new_trick?(game :: Game.t()) :: boolean()
-  defp new_trick?(%Game{tricks: []}), do: true
-  defp new_trick?(%Game{tricks: [head_trick | _]}), do: Trick.complete?(head_trick)
+  @spec new_trick?(game :: TrickTaking.t()) :: boolean()
+  defp new_trick?(%TrickTaking{tricks: []}), do: true
+  defp new_trick?(%TrickTaking{tricks: [head_trick | _]}), do: Trick.complete?(head_trick)
 
-  @spec update_hand(game :: Game.t(), card :: Card.t()) :: Game.t()
-  defp update_hand(%Game{hands: hands} = game, card) do
-    current_player = Game.current_player(game)
+  @spec update_hand(game :: TrickTaking.t(), card :: Card.t()) :: TrickTaking.t()
+  defp update_hand(%TrickTaking{hands: hands} = game, card) do
+    current_player = TrickTaking.current_player(game)
     new_hand = current_hand(game) |> Hand.remove_card(card)
-    %Game{game | hands: List.replace_at(hands, current_player, new_hand)}
+    %TrickTaking{game | hands: List.replace_at(hands, current_player, new_hand)}
   end
 
-  @spec update_trick(game :: Game.t(), card :: Card.t()) :: Game.t()
-  defp update_trick(%Game{tricks: []} = game, card) do
+  @spec update_trick(game :: TrickTaking.t(), card :: Card.t()) :: TrickTaking.t()
+  defp update_trick(%TrickTaking{tricks: []} = game, card) do
     update_game_with_new_trick(game, card)
   end
 
-  defp update_trick(%Game{tricks: [head_trick | rest_tricks]} = game, card) do
+  defp update_trick(%TrickTaking{tricks: [head_trick | rest_tricks]} = game, card) do
     if new_trick?(game) do
       update_game_with_new_trick(game, card)
     else
       new_trick = Trick.play_card(head_trick, card)
-      %Game{game | tricks: [new_trick | rest_tricks]}
+      %TrickTaking{game | tricks: [new_trick | rest_tricks]}
     end
   end
 
-  @spec update_game_with_new_trick(game :: Game.t(), card :: Card.t()) :: Game.t()
-  defp update_game_with_new_trick(%Game{tricks: tricks} = game, card) do
+  @spec update_game_with_new_trick(game :: TrickTaking.t(), card :: Card.t()) :: TrickTaking.t()
+  defp update_game_with_new_trick(%TrickTaking{tricks: tricks} = game, card) do
     current_player = current_player(game)
     new_trick = Trick.new(current_player, card)
-    %Game{game | tricks: [new_trick | tricks]}
+    %TrickTaking{game | tricks: [new_trick | tricks]}
   end
 
-  @spec current_hand(game :: Game.t()) :: Hand.t()
-  defp current_hand(%Game{} = game), do: game |> hand(Game.current_player(game))
+  @spec current_hand(game :: TrickTaking.t()) :: Hand.t()
+  defp current_hand(%TrickTaking{} = game), do: game |> hand(TrickTaking.current_player(game))
 
-  @spec current_trick(game :: Game.t()) :: Trick.t() | nil
-  def current_trick(%Game{tricks: []}), do: nil
-  def current_trick(%Game{tricks: [head_trick | _]}), do: head_trick
+  @spec current_trick(game :: TrickTaking.t()) :: Trick.t() | nil
+  def current_trick(%TrickTaking{tricks: []}), do: nil
+  def current_trick(%TrickTaking{tricks: [head_trick | _]}), do: head_trick
 
-  @spec score_tricks(game :: Game.t()) :: %{(0..3) => 0..25}
-  def score_tricks(%Game{tricks: tricks, trump: trump}) do
+  @spec score_tricks(game :: TrickTaking.t()) :: %{(0..3) => 0..25}
+  def score_tricks(%TrickTaking{tricks: tricks, trump: trump}) do
     scores = %{0 => 0, 1 => 0, 2 => 0, 3 => 0}
 
     tricks
