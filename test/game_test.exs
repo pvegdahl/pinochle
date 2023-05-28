@@ -4,6 +4,10 @@ defmodule GameTest do
   alias Pinochle.Game
 
   test "A new game is in the trick taking state" do
-    assert Game.new().state == :trick_taking
+    {:ok, game} = Game.start_link()
+    assert Game.get(game).game_state == :trick_taking
   end
+
+  #  test "A new game process has state" do
+  #  end
 end
