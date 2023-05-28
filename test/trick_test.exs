@@ -1,8 +1,7 @@
 defmodule TrickTest do
   use ExUnit.Case
 
-  alias Pinochle.Card, as: Card
-  alias Pinochle.Trick, as: Trick
+  alias Pinochle.{Trick, Card}
 
   test "New tricks have a single card" do
     assert Trick.new(0, a_card()) |> Map.get(:cards) |> Enum.count() == 1

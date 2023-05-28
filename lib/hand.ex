@@ -1,6 +1,5 @@
 defmodule Pinochle.Hand do
-  alias Pinochle.Card, as: Card
-  alias Pinochle.Hand, as: Hand
+  alias Pinochle.{Hand, Card}
 
   @type t :: [Card.t()]
 

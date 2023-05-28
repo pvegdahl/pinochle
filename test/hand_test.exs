@@ -1,8 +1,7 @@
 defmodule HandTest do
   use ExUnit.Case
 
-  alias Pinochle.Card, as: Card
-  alias Pinochle.Hand, as: Hand
+  alias Pinochle.{Hand, Card}
 
   test "New hands is 4 hands" do
     assert Hand.deal() |> Enum.count() == 4

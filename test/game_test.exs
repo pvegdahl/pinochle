@@ -1,9 +1,7 @@
 defmodule GameTest do
   use ExUnit.Case
 
-  alias Pinochle.Game, as: Game
-  alias Pinochle.Card, as: Card
-  alias Pinochle.Trick, as: Trick
+  alias Pinochle.{Game, Card, Trick}
 
   test "A new game has current player" do
     0..3 |> Enum.each(fn n -> assert Game.new(n, :hearts) |> Game.current_player() == n end)

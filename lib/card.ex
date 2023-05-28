@@ -1,5 +1,5 @@
 defmodule Pinochle.Card do
-  alias Pinochle.Card, as: Card
+  alias Pinochle.Card
 
   @enforce_keys [:rank, :suit]
   defstruct [:rank, :suit]

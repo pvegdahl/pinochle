@@ -1,6 +1,5 @@
 defmodule Pinochle.Trick do
-  alias Pinochle.Card, as: Card
-  alias Pinochle.Trick, as: Trick
+  alias Pinochle.{Trick, Card}
 
   @enforce_keys [:starting_player, :cards]
   defstruct [:starting_player, :cards]

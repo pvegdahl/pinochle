@@ -1,8 +1,5 @@
 defmodule Pinochle.Game do
-  alias Pinochle.Game, as: Game
-  alias Pinochle.Card, as: Card
-  alias Pinochle.Hand, as: Hand
-  alias Pinochle.Trick, as: Trick
+  alias Pinochle.{Game, Card, Hand, Trick}
 
   @enforce_keys [:starting_player, :hands, :trump]
   defstruct starting_player: nil, hands: nil, trump: nil, tricks: []

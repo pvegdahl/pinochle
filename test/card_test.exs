@@ -1,7 +1,7 @@
 defmodule CardTest do
   use ExUnit.Case
 
-  alias Pinochle.Card, as: Card
+  alias Pinochle.Card
 
   test "Create a card" do
     assert Card.new(:queen, :spades) == %Card{rank: :queen, suit: :spades}
