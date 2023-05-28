@@ -41,9 +41,12 @@ defmodule Pinochle.Trick do
 
     cards
     |> Enum.find_index(&(&1 == winning_card))
-    |> then(&(&1 + starting_player))
+    |> add(starting_player)
     |> Integer.mod(4)
   end
+
+  @spec add(a :: integer(), b :: integer()) :: integer()
+  defp add(a, b), do: a + b
 
   @spec cards(trick :: Trick.t()) :: [Card.t()]
   def cards(%Trick{cards: cards}), do: cards
