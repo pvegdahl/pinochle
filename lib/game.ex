@@ -43,8 +43,10 @@ defmodule Pinochle.Game do
         _from,
         %Game{game_state: :trick_taking, data: %TrickTaking{} = trick_taking} = game
       ) do
-    with {:ok, new_trick_taking} = TrickTaking.play_card(trick_taking, player, card) do
+    with {:ok, new_trick_taking} <- TrickTaking.play_card(trick_taking, player, card) do
       {:reply, :ok, %Game{game | data: new_trick_taking}}
+    else
+      {:error, reason} -> {:reply, {:error, reason}, game}
     end
   end
 end

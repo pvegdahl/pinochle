@@ -1,7 +1,7 @@
 defmodule GameTest do
   use ExUnit.Case
 
-  alias Pinochle.{Game, TrickTaking}
+  alias Pinochle.{Game, Card, TrickTaking}
 
   test "A new game is in the trick taking state" do
     {:ok, game_pid} = Game.start_link()
@@ -35,4 +35,24 @@ defmodule GameTest do
       TrickTaking.current_hand(game.data)
     end
   end
+
+  test "Playing out of turn returns an error" do
+    {:ok, game_pid} = Game.start_link()
+
+    assert Game.play_card(game_pid, 2, Card.new(:queen, :spades)) == {:error, :inactive_player}
+  end
+
+  test "An invalid play does not update the game state" do
+    {:ok, game_pid} = Game.start_link()
+    {:ok, original_game} = Game.get(game_pid)
+
+    Game.play_card(game_pid, 2, Card.new(:queen, :spades))
+
+    {:ok, updated_game} = Game.get(game_pid)
+    assert updated_game == original_game
+  end
 end
+
+# TODO
+#   + Play card errors
+#     - Invalid card
