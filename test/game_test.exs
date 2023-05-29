@@ -51,8 +51,19 @@ defmodule GameTest do
     {:ok, updated_game} = Game.get(game_pid)
     assert updated_game == original_game
   end
-end
 
-# TODO
-#   + Play card errors
-#     - Invalid card
+  test "Playing a card not in hand is an error" do
+    {:ok, game_pid} = Game.start_link()
+
+    card_not_in_hand = get_card_not_in_active_player_hand(game_pid)
+
+    assert Game.play_card(game_pid, 0, card_not_in_hand) == {:error, :invalid_card}
+  end
+
+  defp get_card_not_in_active_player_hand(game_pid) do
+    cards_in_hand = active_player_hand(game_pid) |> MapSet.new()
+    all_cards = Card.deck() |> MapSet.new()
+
+    MapSet.difference(all_cards, cards_in_hand) |> Enum.take(1) |> List.first()
+  end
+end
