@@ -32,7 +32,8 @@ defmodule Pinochle.Game do
     GenServer.call(game_pid, {:play_card, player, card})
   end
 
-  @spec handle_call(request :: :get, from :: pid(), game :: Game.t()) :: {:reply, Game.t(), Game.t()}
+  @spec handle_call(request :: :get | {:play_card, 0..3, Card.t()}, from :: pid(), game :: Game.t()) ::
+          {:reply, Game.t() | :ok, Game.t()}
   def handle_call(:get, _from, game) do
     {:reply, game, game}
   end
