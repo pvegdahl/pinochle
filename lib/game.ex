@@ -21,11 +21,13 @@ defmodule Pinochle.Game do
     GenServer.start_link(__MODULE__, {starting_player, trump})
   end
 
+  @spec get(game_pid :: pid()) :: {:ok, Game.t()}
   def get(game_pid) do
     game = GenServer.call(game_pid, :get)
     {:ok, game}
   end
 
+  @spec play_card(game_pid :: pid(), player :: 0..3, card :: Card.t()) :: :ok
   def play_card(game_pid, player, card) do
     GenServer.call(game_pid, {:play_card, player, card})
   end
