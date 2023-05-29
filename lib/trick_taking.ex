@@ -110,7 +110,7 @@ defmodule Pinochle.TrickTaking do
   end
 
   @spec current_hand(game :: TrickTaking.t()) :: Hand.t()
-  defp current_hand(%TrickTaking{} = game), do: game |> hand(TrickTaking.current_player(game))
+  def current_hand(%TrickTaking{} = game), do: game |> hand(TrickTaking.current_player(game))
 
   @spec current_trick(game :: TrickTaking.t()) :: Trick.t() | nil
   def current_trick(%TrickTaking{tricks: []}), do: nil
