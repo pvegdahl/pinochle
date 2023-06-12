@@ -1,5 +1,5 @@
 defmodule Pinochle.TrickTakingTestHelpers do
-  alias Pinochle.{Card, TrickTaking}
+  alias Pinochle.{Card, Trick, TrickTaking}
 
   @spec sorted_game(starting_player :: 0..3, trump :: Card.suit()) :: TrickTaking.t()
   def sorted_game(starting_player, trump \\ :clubs) do
@@ -17,5 +17,12 @@ defmodule Pinochle.TrickTakingTestHelpers do
     current_player = TrickTaking.current_player(trick_taking)
     {:ok, updated_game} = TrickTaking.play_card(trick_taking, current_player, card)
     updated_game
+  end
+
+  @spec create_trick(starting_player :: 0..3, [Card.t()]) :: Trick.t()
+  def create_trick(starting_player, [first_card | rest_of_cards]) do
+    trick = Trick.new(starting_player, first_card)
+
+    Enum.reduce(rest_of_cards, trick, fn card, acc -> Trick.play_card(acc, card) end)
   end
 end

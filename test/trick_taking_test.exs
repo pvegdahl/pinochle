@@ -146,7 +146,7 @@ defmodule TrickTakingTest do
     ]
 
     trick =
-      create_trick(0, [
+      Helpers.create_trick(0, [
         Card.new(:ten, :spades),
         Card.new(:nine, :spades),
         Card.new(:jack, :spades),
@@ -173,7 +173,7 @@ defmodule TrickTakingTest do
     ]
 
     trick =
-      create_trick(0, [
+      Helpers.create_trick(0, [
         Card.new(:ten, :spades),
         Card.new(:nine, :spades),
         Card.new(:jack, :spades),
@@ -193,33 +193,27 @@ defmodule TrickTakingTest do
     assert TrickTaking.play_card(game, 3, Card.new(:king, :spades)) == {:error, :inactive_player}
   end
 
-  defp create_trick(starting_player, [first_card | rest_of_cards]) do
-    trick = Trick.new(starting_player, first_card)
-
-    Enum.reduce(rest_of_cards, trick, fn card, acc -> Trick.play_card(acc, card) end)
-  end
-
   test "Score all tricks and assign points" do
     tricks = [
-      create_trick(3, [
+      Helpers.create_trick(3, [
         Card.new(:ace, :diamonds),
         Card.new(:nine, :spades),
         Card.new(:ten, :hearts),
         Card.new(:king, :hearts)
       ]),
-      create_trick(3, [
+      Helpers.create_trick(3, [
         Card.new(:ace, :hearts),
         Card.new(:nine, :hearts),
         Card.new(:king, :hearts),
         Card.new(:queen, :hearts)
       ]),
-      create_trick(0, [
+      Helpers.create_trick(0, [
         Card.new(:nine, :spades),
         Card.new(:queen, :spades),
         Card.new(:king, :spades),
         Card.new(:ten, :spades)
       ]),
-      create_trick(0, [
+      Helpers.create_trick(0, [
         Card.new(:ten, :spades),
         Card.new(:nine, :spades),
         Card.new(:king, :spades),
@@ -234,7 +228,7 @@ defmodule TrickTakingTest do
 
   test "Add a point for last trick when scoring" do
     tricks =
-      create_trick(2, [
+      Helpers.create_trick(2, [
         Card.new(:ace, :spades),
         Card.new(:nine, :spades),
         Card.new(:king, :spades),
