@@ -11,4 +11,11 @@ defmodule Pinochle.TrickTakingTestHelpers do
 
     %TrickTaking{starting_player: starting_player, hands: hands, trump: trump}
   end
+
+  @spec play_card(trick_taking :: TrickTaking.t(), card :: Card.t()) :: TrickTaking.t()
+  def play_card(trick_taking, card) do
+    current_player = TrickTaking.current_player(trick_taking)
+    {:ok, updated_game} = TrickTaking.play_card(trick_taking, current_player, card)
+    updated_game
+  end
 end

@@ -92,28 +92,22 @@ defmodule TrickTakingTest do
   test "When a trick is done, then the next player is the player who one the trick" do
     game =
       Helpers.sorted_game(0, :spades)
-      |> play_card_helper(Card.new(:ace, :clubs))
-      |> play_card_helper(Card.new(:nine, :diamonds))
-      |> play_card_helper(Card.new(:nine, :hearts))
-      |> play_card_helper(Card.new(:nine, :spades))
+      |> Helpers.play_card(Card.new(:ace, :clubs))
+      |> Helpers.play_card(Card.new(:nine, :diamonds))
+      |> Helpers.play_card(Card.new(:nine, :hearts))
+      |> Helpers.play_card(Card.new(:nine, :spades))
 
     assert TrickTaking.current_player(game) == 3
-  end
-
-  defp play_card_helper(game, card) do
-    current_player = TrickTaking.current_player(game)
-    {:ok, updated_game} = TrickTaking.play_card(game, current_player, card)
-    updated_game
   end
 
   test "A new trick replaces the last trick" do
     game =
       Helpers.sorted_game(0, :spades)
-      |> play_card_helper(Card.new(:ace, :clubs))
-      |> play_card_helper(Card.new(:nine, :diamonds))
-      |> play_card_helper(Card.new(:nine, :hearts))
-      |> play_card_helper(Card.new(:nine, :spades))
-      |> play_card_helper(Card.new(:ace, :spades))
+      |> Helpers.play_card(Card.new(:ace, :clubs))
+      |> Helpers.play_card(Card.new(:nine, :diamonds))
+      |> Helpers.play_card(Card.new(:nine, :hearts))
+      |> Helpers.play_card(Card.new(:nine, :spades))
+      |> Helpers.play_card(Card.new(:ace, :spades))
 
     trick_cards =
       game
