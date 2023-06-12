@@ -43,8 +43,16 @@ defmodule PlayerViewTest do
 
     assert player_view.trump == trump
   end
+
+  test "PlayerView contains hand sizes" do
+    trick_taking = TrickTaking.new(0, :clubs)
+    game = %Game{game_state: :trick_taking, data: trick_taking}
+
+    player_view = PlayerView.from_game(game, 1)
+
+    assert player_view.hand_sizes == [12, 12, 12, 12]
+  end
 end
 
 # TODO:
 #  - Current trick (or all tricks?)
-#  - Other player hand sizes

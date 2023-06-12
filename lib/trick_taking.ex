@@ -147,4 +147,7 @@ defmodule Pinochle.TrickTaking do
 
   @spec trump(trick_taking :: TrickTaking.t()) :: Card.suit()
   def trump(%TrickTaking{trump: trump}), do: trump
+
+  @spec hands(trick_taking :: TrickTaking.t()) :: [Hand.t()]
+  def hands(%TrickTaking{hands: hands}), do: hands
 end
