@@ -144,4 +144,7 @@ defmodule Pinochle.TrickTaking do
       player_scores
     end
   end
+
+  @spec trump(trick_taking :: TrickTaking.t()) :: Card.suit()
+  def trump(%TrickTaking{trump: trump}), do: trump
 end

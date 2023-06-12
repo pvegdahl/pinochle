@@ -33,9 +33,18 @@ defmodule PlayerViewTest do
 
     assert player_view.current_player == current_player
   end
+
+  test "PlayerView tracks trump" do
+    trump = :diamonds
+    trick_taking = TrickTaking.new(0, trump)
+    game = %Game{game_state: :trick_taking, data: trick_taking}
+
+    player_view = PlayerView.from_game(game, 1)
+
+    assert player_view.trump == trump
+  end
 end
 
 # TODO:
-#  - Trump
 #  - Current trick (or all tricks?)
 #  - Other player hand sizes
