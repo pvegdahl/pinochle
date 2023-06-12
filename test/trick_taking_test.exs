@@ -3,6 +3,8 @@ defmodule TrickTakingTest do
 
   alias Pinochle.{TrickTaking, Card, Trick}
 
+  alias Pinochle.TrickTakingTestHelpers, as: Helpers
+
   test "A new game has current player" do
     0..3 |> Enum.each(fn n -> assert TrickTaking.new(n, :hearts) |> TrickTaking.current_player() == n end)
   end
@@ -13,29 +15,19 @@ defmodule TrickTakingTest do
   end
 
   test "A player playing a card increments to the next player" do
-    {:ok, game} = sorted_game(0) |> TrickTaking.play_card(0, Card.new(:queen, :clubs))
+    {:ok, game} = Helpers.sorted_game(0) |> TrickTaking.play_card(0, Card.new(:queen, :clubs))
 
     assert TrickTaking.current_player(game) == 1
   end
 
-  defp sorted_game(starting_player, trump \\ :clubs) do
-    # Each player will have all cards of one suit: clubs, diamonds, hearts, spades
-    hands =
-      Card.deck()
-      |> Enum.sort_by(fn card -> card.suit end)
-      |> Enum.chunk_every(12)
-
-    %TrickTaking{starting_player: starting_player, hands: hands, trump: trump}
-  end
-
   test "Player 3 playing a card wraps back to player 0" do
-    {:ok, game} = sorted_game(3) |> TrickTaking.play_card(3, Card.new(:king, :spades))
+    {:ok, game} = Helpers.sorted_game(3) |> TrickTaking.play_card(3, Card.new(:king, :spades))
 
     assert TrickTaking.current_player(game) == 0
   end
 
   test "A player playing a card removes it from their hand" do
-    {:ok, game} = sorted_game(0) |> TrickTaking.play_card(0, Card.new(:queen, :clubs))
+    {:ok, game} = Helpers.sorted_game(0) |> TrickTaking.play_card(0, Card.new(:queen, :clubs))
 
     assert TrickTaking.hand(game, 0) |> Enum.sort() ==
              [
@@ -77,7 +69,7 @@ defmodule TrickTakingTest do
   end
 
   test "Playing the first card of the game creates a new trick" do
-    game = sorted_game(3)
+    game = Helpers.sorted_game(3)
 
     {:ok, updated_game} = TrickTaking.play_card(game, 3, Card.new(:nine, :spades))
 
@@ -85,7 +77,7 @@ defmodule TrickTakingTest do
   end
 
   test "Playing another card updates the existing trick" do
-    {:ok, game} = sorted_game(3) |> TrickTaking.play_card(3, Card.new(:nine, :spades))
+    {:ok, game} = Helpers.sorted_game(3) |> TrickTaking.play_card(3, Card.new(:nine, :spades))
 
     {:ok, updated_game} = TrickTaking.play_card(game, 0, Card.new(:ten, :clubs))
 
@@ -99,7 +91,7 @@ defmodule TrickTakingTest do
 
   test "When a trick is done, then the next player is the player who one the trick" do
     game =
-      sorted_game(0, :spades)
+      Helpers.sorted_game(0, :spades)
       |> play_card_helper(Card.new(:ace, :clubs))
       |> play_card_helper(Card.new(:nine, :diamonds))
       |> play_card_helper(Card.new(:nine, :hearts))
@@ -116,7 +108,7 @@ defmodule TrickTakingTest do
 
   test "A new trick replaces the last trick" do
     game =
-      sorted_game(0, :spades)
+      Helpers.sorted_game(0, :spades)
       |> play_card_helper(Card.new(:ace, :clubs))
       |> play_card_helper(Card.new(:nine, :diamonds))
       |> play_card_helper(Card.new(:nine, :hearts))
@@ -173,7 +165,7 @@ defmodule TrickTakingTest do
   end
 
   test "Okay, a card not in hand is not playable even on a fresh game" do
-    game = sorted_game(0)
+    game = Helpers.sorted_game(0)
 
     assert TrickTaking.play_card(game, 0, Card.new(:king, :hearts)) == {:error, :invalid_card}
   end
@@ -200,7 +192,7 @@ defmodule TrickTakingTest do
   end
 
   test "A non-active player cannot play a card" do
-    game = sorted_game(0)
+    game = Helpers.sorted_game(0)
 
     assert TrickTaking.play_card(game, 1, Card.new(:king, :diamonds)) == {:error, :inactive_player}
     assert TrickTaking.play_card(game, 2, Card.new(:king, :hearts)) == {:error, :inactive_player}
