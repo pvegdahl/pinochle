@@ -8,7 +8,8 @@ defmodule Pinochle.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Registry, keys: :unique, name: Registry.Game}
+      {Registry, keys: :unique, name: Registry.Game},
+      Pinochle.GameSupervisor,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
