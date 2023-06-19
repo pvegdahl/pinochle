@@ -10,7 +10,7 @@ defmodule Pinochle.PlayerView do
           hand: Hand.t(),
           trump: Card.suit(),
           hand_sizes: [0..16],
-          current_trick: Trick.t() | nil,
+          current_trick: Trick.t() | nil
         }
 
   @spec from_game(game :: Game.t(), player :: 0..3) :: PlayerView.t()
@@ -21,7 +21,7 @@ defmodule Pinochle.PlayerView do
       hand: TrickTaking.hand(trick_taking, player),
       trump: TrickTaking.trump(trick_taking),
       hand_sizes: TrickTaking.hands(trick_taking) |> Enum.map(&Enum.count/1),
-      current_trick: TrickTaking.current_trick(trick_taking),
+      current_trick: TrickTaking.current_trick(trick_taking)
     }
   end
 end

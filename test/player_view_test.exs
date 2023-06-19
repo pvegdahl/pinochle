@@ -63,4 +63,13 @@ defmodule PlayerViewTest do
 
     assert player_view.current_trick == Trick.new(0, card_in_hand)
   end
+
+  test "PlayerView does not contain the latest trick when there is no latest trick" do
+    trick_taking = TrickTaking.new(0, :clubs)
+    game = %Game{game_state: :trick_taking, data: trick_taking}
+
+    player_view = PlayerView.from_game(game, 1)
+
+    assert player_view.current_trick == nil
+  end
 end
