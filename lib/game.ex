@@ -16,9 +16,9 @@ defmodule Pinochle.Game do
     {:ok, game}
   end
 
-  @spec start_link(starting_player :: 0..3, trump :: Card.suit()) :: GenServer.on_start()
-  def start_link(starting_player \\ 0, trump \\ :spades) do
-    GenServer.start_link(__MODULE__, {starting_player, trump})
+  @spec start_link(name :: String.t(), starting_player :: 0..3, trump :: Card.suit()) :: GenServer.on_start()
+  def start_link(name, starting_player \\ 0, trump \\ :spades) do
+    GenServer.start_link(__MODULE__, {starting_player, trump}, name: via_tuple(name))
   end
 
   @spec get(game_pid :: pid()) :: {:ok, Game.t()}
@@ -49,4 +49,6 @@ defmodule Pinochle.Game do
       {:error, reason} -> {:reply, {:error, reason}, game}
     end
   end
+
+  def via_tuple(name), do: {:via, Registry, {Registry.Game, name}}
 end

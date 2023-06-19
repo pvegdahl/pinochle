@@ -4,13 +4,13 @@ defmodule GameTest do
   alias Pinochle.{Game, Card, TrickTaking}
 
   test "A new game is in the trick taking state" do
-    {:ok, game_pid} = Game.start_link()
+    {:ok, game_pid} = Game.start_link("game_name")
     {:ok, game} = Game.get(game_pid)
     assert game.game_state == :trick_taking
   end
 
   test "Playing a card updates the state" do
-    {:ok, game_pid} = Game.start_link()
+    {:ok, game_pid} = Game.start_link("game_name")
     card_in_hand = get_card_in_active_player_hand(game_pid)
 
     :ok = Game.play_card(game_pid, 0, card_in_hand)
@@ -37,13 +37,13 @@ defmodule GameTest do
   end
 
   test "Playing out of turn returns an error" do
-    {:ok, game_pid} = Game.start_link()
+    {:ok, game_pid} = Game.start_link("game_name")
 
     assert Game.play_card(game_pid, 2, Card.new(:queen, :spades)) == {:error, :inactive_player}
   end
 
   test "An invalid play does not update the game state" do
-    {:ok, game_pid} = Game.start_link()
+    {:ok, game_pid} = Game.start_link("game_name")
     {:ok, original_game} = Game.get(game_pid)
 
     Game.play_card(game_pid, 2, Card.new(:queen, :spades))
@@ -53,7 +53,7 @@ defmodule GameTest do
   end
 
   test "Playing a card not in hand is an error" do
-    {:ok, game_pid} = Game.start_link()
+    {:ok, game_pid} = Game.start_link("game_name")
 
     card_not_in_hand = get_card_not_in_active_player_hand(game_pid)
 
