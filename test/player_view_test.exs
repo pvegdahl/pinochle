@@ -1,7 +1,7 @@
 defmodule PlayerViewTest do
   use ExUnit.Case
 
-  alias Pinochle.{PlayerView, Game, TrickTaking}
+  alias Pinochle.{PlayerView, Game, Trick, TrickTaking}
 
   test "PlayerView has the correct player hand" do
     trick_taking = TrickTaking.new(2, :hearts)
@@ -52,7 +52,15 @@ defmodule PlayerViewTest do
 
     assert player_view.hand_sizes == [12, 12, 12, 12]
   end
-end
 
-# TODO:
-#  - Current trick (or all tricks?)
+  test "PlayerView contains latest trick" do
+    trick_taking = TrickTaking.new(0, :clubs)
+    card_in_hand = TrickTaking.hand(trick_taking, 0) |> List.first()
+    {:ok, updated_trick_taking} = TrickTaking.play_card(trick_taking, 0, card_in_hand)
+    game = %Game{game_state: :trick_taking, data: updated_trick_taking}
+
+    player_view = PlayerView.from_game(game, 1)
+
+    assert player_view.current_trick == Trick.new(0, card_in_hand)
+  end
+end
