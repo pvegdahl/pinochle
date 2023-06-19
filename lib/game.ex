@@ -1,4 +1,6 @@
 defmodule Pinochle.Game do
+  use GenServer, start: {__MODULE__, :start_link, []}, restart: :transient
+
   alias Pinochle.{Game, Card, TrickTaking}
 
   @enforce_keys [:game_state]
