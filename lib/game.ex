@@ -3,6 +3,8 @@ defmodule Pinochle.Game do
 
   alias Pinochle.{Game, Card, TrickTaking}
 
+  @timeout 15000
+
   @enforce_keys [:game_state]
   defstruct [:game_state, :data]
 
@@ -15,7 +17,7 @@ defmodule Pinochle.Game do
     # This is obviously not correct Pinochle, but the goal is to implement the full trick taking flow before anything
     # else.  Then I'll come back and make the other flows.
     game = %Game{game_state: :trick_taking, data: TrickTaking.new(starting_player, trump)}
-    {:ok, game}
+    {:ok, game, @timeout}
   end
 
   @spec start_link(name :: String.t(), starting_player :: 0..3, trump :: Card.suit()) :: GenServer.on_start()
