@@ -1,5 +1,5 @@
 defmodule Pinochle.Meld do
-  def score(_hand) do
-    0
+  def score(hand, _trump) do
+    Enum.count(hand)
   end
 end
