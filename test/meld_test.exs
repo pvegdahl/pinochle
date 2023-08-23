@@ -56,10 +56,27 @@ defmodule MeldTest do
              :hearts
            ) == 4
   end
+
+  test "A handful of different marriages and non-marriages across suits" do
+    assert Meld.score(
+             [
+               Card.new(:king, :diamonds),
+               Card.new(:queen, :diamonds),
+               Card.new(:queen, :diamonds),
+               Card.new(:king, :clubs),
+               Card.new(:queen, :hearts),
+               Card.new(:king, :spades),
+               Card.new(:king, :spades),
+               Card.new(:queen, :spades),
+               Card.new(:queen, :spades),
+             ],
+             :spades
+           ) == 10
+  end
 end
 
 # TODO
-#   - Multiple marriages
 #   - Pinochles
 #   - Runs
+#     - Run + extra marriage
 #   - X around
