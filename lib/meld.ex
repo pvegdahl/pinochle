@@ -1,6 +1,7 @@
 defmodule Pinochle.Meld do
-  alias Pinochle.Card
+  alias Pinochle.{Card, Hand}
 
+  @spec score(hand :: Hand, trump :: Card.suit()) :: non_neg_integer()
   def score(hand, trump) do
     nines(hand, trump) + marriages_non_trump(hand, trump) + marriages_of_trump(hand, trump)
   end
