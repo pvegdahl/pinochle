@@ -26,4 +26,8 @@ defmodule MeldTest do
       assert Meld.score([Card.new(unquote(rank), :hearts)], :hearts) == 0
     end
   end
+
+  test "An off-suit marriage is worth 2 points" do
+    assert Meld.score([Card.new(:king, :hearts), Card.new(:queen, :hearts)], :diamonds) == 2
+  end
 end
