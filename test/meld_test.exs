@@ -20,4 +20,10 @@ defmodule MeldTest do
   test "Two nines of trump are worth two points" do
     assert Meld.score(List.duplicate(Card.new(:nine, :clubs), 2), :clubs) == 2
   end
+
+  for rank <- [:jack, :queen, :king, :ten, :ace] do
+    test "A #{rank} of trump (in isolation) is worth no points" do
+      assert Meld.score([Card.new(unquote(rank), :hearts)], :hearts) == 0
+    end
+  end
 end
