@@ -16,4 +16,8 @@ defmodule MeldTest do
       assert Meld.score([Card.new(:nine, unquote(suit))], :spades) == 0
     end
   end
+
+  test "Two nines of trump are worth two points" do
+    assert Meld.score(List.duplicate(Card.new(:nine, :clubs), 2), :clubs) == 2
+  end
 end
