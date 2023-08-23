@@ -6,10 +6,21 @@ defmodule Pinochle.Meld do
   end
 
   defp marriages(hand, _trump) do
-    kings = Enum.count(hand, fn %Card{rank: rank} -> rank == :king end)
-    queens = Enum.count(hand, fn %Card{rank: rank} -> rank == :queen end)
+    queen_suits =
+      hand
+      |> Enum.filter(fn card -> card.rank == :queen end)
+      |> Enum.map(fn card -> card.suit end)
+      |> Enum.into(MapSet.new())
 
-    min(kings, queens) * 2
+    king_suits =
+      hand
+      |> Enum.filter(fn card -> card.rank == :king end)
+      |> Enum.map(fn card -> card.suit end)
+      |> Enum.into(MapSet.new())
+
+    MapSet.intersection(queen_suits, king_suits)
+    |> MapSet.size()
+    |> Kernel.*(2)
   end
 
   defp nines(hand, trump) do
