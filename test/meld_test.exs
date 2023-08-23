@@ -34,4 +34,22 @@ defmodule MeldTest do
   test "A marriage must be in the same suit" do
     assert Meld.score([Card.new(:king, :hearts), Card.new(:queen, :clubs)], :diamonds) == 0
   end
+
+  test "Two marriages of the same suit score 4 points" do
+    assert Meld.score(
+             [
+               Card.new(:king, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:queen, :hearts)
+             ],
+             :diamonds
+           ) == 4
+  end
 end
+
+# TODO
+#   - Marriages of trump are more points
+#   - Pinocholes
+#   - Runs
+#   - X around

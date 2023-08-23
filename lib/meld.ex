@@ -6,19 +6,23 @@ defmodule Pinochle.Meld do
   end
 
   defp marriages(hand, _trump) do
-    queen_suits = suits_of_rank(hand, :queen)
-    king_suits = suits_of_rank(hand, :king)
+    queen_suits = count_suits_of_rank(hand, :queen)
+    king_suits = count_suits_of_rank(hand, :king)
 
-    MapSet.intersection(queen_suits, king_suits)
-    |> MapSet.size()
+    min_of_two_maps(queen_suits, king_suits)
+    |> Map.values()
+    |> Enum.sum()
     |> Kernel.*(2)
   end
 
-  defp suits_of_rank(hand, rank) do
+  defp count_suits_of_rank(hand, rank) do
     hand
     |> Enum.filter(fn card -> card.rank == rank end)
-    |> Enum.map(fn card -> card.suit end)
-    |> Enum.into(MapSet.new())
+    |> Enum.frequencies_by(fn card -> card.suit end)
+  end
+
+  defp min_of_two_maps(map1, map2) do
+    Map.intersect(map1, map2, fn _k, v1, v2 -> min(v1, v2) end)
   end
 
   defp nines(hand, trump) do
