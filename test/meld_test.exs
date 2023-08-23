@@ -68,7 +68,7 @@ defmodule MeldTest do
                Card.new(:king, :spades),
                Card.new(:king, :spades),
                Card.new(:queen, :spades),
-               Card.new(:queen, :spades),
+               Card.new(:queen, :spades)
              ],
              :spades
            ) == 10
