@@ -2,17 +2,28 @@ defmodule Pinochle.Meld do
   alias Pinochle.Card
 
   def score(hand, trump) do
-    nines(hand, trump) + marriages(hand, trump)
+    nines(hand, trump) + marriages_non_trump(hand, trump) + marriages_of_trump(hand, trump)
   end
 
-  defp marriages(hand, _trump) do
-    queen_suits = count_suits_of_rank(hand, :queen)
-    king_suits = count_suits_of_rank(hand, :king)
+  defp marriages_non_trump(hand, trump) do
+    hand_without_trump = Enum.reject(hand, fn card -> card.suit == trump end)
+    queen_suits = count_suits_of_rank(hand_without_trump, :queen)
+    king_suits = count_suits_of_rank(hand_without_trump, :king)
 
     min_of_two_maps(queen_suits, king_suits)
     |> Map.values()
     |> Enum.sum()
     |> Kernel.*(2)
+  end
+
+  defp marriages_of_trump(hand, trump) do
+    queen_of_trump = Card.new(:queen, trump)
+    king_of_trump = Card.new(:king, trump)
+
+    queens = Enum.count(hand, fn card -> card == queen_of_trump end)
+    kings = Enum.count(hand, fn card -> card == king_of_trump end)
+
+    min(queens, kings) * 4
   end
 
   defp count_suits_of_rank(hand, rank) do

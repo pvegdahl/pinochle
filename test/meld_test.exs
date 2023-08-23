@@ -46,10 +46,20 @@ defmodule MeldTest do
              :diamonds
            ) == 4
   end
+
+  test "Marriages of trump score 4 points each" do
+    assert Meld.score(
+             [
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts)
+             ],
+             :hearts
+           ) == 4
+  end
 end
 
 # TODO
-#   - Marriages of trump are more points
-#   - Pinocholes
+#   - Multiple marriages
+#   - Pinochles
 #   - Runs
 #   - X around
