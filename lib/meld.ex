@@ -1,5 +1,7 @@
 defmodule Pinochle.Meld do
-  def score(hand, _trump) do
-    Enum.count(hand)
+  alias Pinochle.Card
+
+  def score(hand, trump) do
+    Enum.count(hand, fn %Card{suit: suit} -> suit == trump end)
   end
 end
