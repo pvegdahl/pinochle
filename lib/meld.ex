@@ -49,7 +49,13 @@ defmodule Pinochle.Meld do
   end
 
   @spec score_pinochles(card_frequencies :: %{Card.t() => 1..2}) :: 0 | 4 | 30
-  defp score_pinochles(card_frequencies), do: 4 * count_pinochles(card_frequencies)
+  defp score_pinochles(card_frequencies) do
+    case count_pinochles(card_frequencies) do
+      0 -> 0
+      1 -> 4
+      2 -> 30
+    end
+  end
 
   @spec count_pinochles(card_frequencies :: %{Card.t() => 1..2}) :: 0..2
   defp count_pinochles(card_frequencies) do

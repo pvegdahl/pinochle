@@ -80,6 +80,15 @@ defmodule MeldTest do
       Card.new(:jack, :diamonds),
     ], :clubs) == 4
   end
+
+  test "A double pinochle is worth 30 points" do
+    assert Meld.score([
+             Card.new(:queen, :spades),
+             Card.new(:queen, :spades),
+             Card.new(:jack, :diamonds),
+             Card.new(:jack, :diamonds),
+           ], :diamonds) == 30
+  end
 end
 
 # TODO
