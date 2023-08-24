@@ -22,13 +22,9 @@ defmodule Pinochle.Meld do
   defp score_marriages_of_trump(card_frequencies, trump), do: 4 * count_marriages_of_trump(card_frequencies, trump)
 
   defp count_marriages_of_trump(card_frequencies, trump) do
-    queen_of_trump = Card.new(:queen, trump)
-    king_of_trump = Card.new(:king, trump)
-
-    queens = Map.get(card_frequencies, queen_of_trump, 0)
-    kings = Map.get(card_frequencies, king_of_trump, 0)
-
-    min(queens, kings)
+    [Card.new(:queen, trump), Card.new(:king, trump)]
+    |> Enum.map(&Map.get(card_frequencies, &1, 0))
+    |> Enum.min()
   end
 
   defp count_suits_of_rank(hand, rank) do
