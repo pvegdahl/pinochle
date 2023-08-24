@@ -4,7 +4,10 @@ defmodule Pinochle.Meld do
   @spec score(hand :: Hand, trump :: Card.suit()) :: non_neg_integer()
   def score(hand, trump) do
     card_frequencies = Hand.frequencies(hand)
-    score_nines(card_frequencies, trump) + score_marriages_non_trump(hand, trump) + score_marriages_of_trump(card_frequencies, trump)
+
+    score_nines(card_frequencies, trump) +
+      score_marriages_non_trump(hand, trump) +
+      score_marriages_of_trump(card_frequencies, trump)
   end
 
   defp score_marriages_non_trump(hand, trump), do: 2 * count_marriages_non_trump(hand, trump)
