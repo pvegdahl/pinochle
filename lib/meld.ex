@@ -36,7 +36,12 @@ defmodule Pinochle.Meld do
 
   @spec count_marriages_of_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
   defp count_marriages_of_trump(card_frequencies, trump) do
-    [Card.new(:queen, trump), Card.new(:king, trump)]
+    count_card_collection(card_frequencies, [Card.new(:queen, trump), Card.new(:king, trump)])
+  end
+
+  @spec count_card_collection(card_frequencies :: %{Card.t() => 1..2}, card_collection :: [Card.t()]) :: 0..2
+  defp count_card_collection(card_frequencies, card_collection) do
+    card_collection
     |> Enum.map(&Map.get(card_frequencies, &1, 0))
     |> Enum.min()
   end
