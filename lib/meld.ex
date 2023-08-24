@@ -7,7 +7,8 @@ defmodule Pinochle.Meld do
 
     score_nines(card_frequencies, trump) +
       score_marriages_non_trump(card_frequencies, trump) +
-      score_marriages_of_trump(card_frequencies, trump)
+      score_marriages_of_trump(card_frequencies, trump) +
+      score_pinochles(card_frequencies)
   end
 
   @spec score_marriages_non_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..12
@@ -45,5 +46,13 @@ defmodule Pinochle.Meld do
   @spec score_nines(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
   defp score_nines(card_frequencies, trump) do
     Map.get(card_frequencies, Card.new(:nine, trump), 0)
+  end
+
+  @spec score_pinochles(card_frequencies :: %{Card.t() => 1..2}) :: 0 | 4 | 30
+  defp score_pinochles(card_frequencies), do: 4 * count_pinochles(card_frequencies)
+
+  @spec count_pinochles(card_frequencies :: %{Card.t() => 1..2}) :: 0..2
+  defp count_pinochles(card_frequencies) do
+    count_card_collection(card_frequencies, [Card.new(:queen, :spades), Card.new(:jack, :diamonds)])
   end
 end
