@@ -3,7 +3,8 @@ defmodule Pinochle.Meld do
 
   @spec score(hand :: Hand, trump :: Card.suit()) :: non_neg_integer()
   def score(hand, trump) do
-    score_nines(hand, trump) + score_marriages_non_trump(hand, trump) + score_marriages_of_trump(hand, trump)
+    card_frequencies = Hand.frequencies(hand)
+    score_nines(card_frequencies, trump) + score_marriages_non_trump(hand, trump) + score_marriages_of_trump(hand, trump)
   end
 
   defp score_marriages_non_trump(hand, trump), do: 2 * count_marriages_non_trump(hand, trump)
@@ -40,7 +41,7 @@ defmodule Pinochle.Meld do
     Map.intersect(map1, map2, fn _k, v1, v2 -> min(v1, v2) end)
   end
 
-  defp score_nines(hand, trump) do
-    Enum.count(hand, fn card -> card == Card.new(:nine, trump) end)
+  defp score_nines(card_frequencies, trump) do
+    Map.get(card_frequencies, Card.new(:nine, trump), 0)
   end
 end
