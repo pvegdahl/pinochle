@@ -34,6 +34,9 @@ defmodule Pinochle.Hand do
     |> filter_winners_or_everything(winning_card, trump)
   end
 
+  @spec frequencies(hand :: t()) :: %{Card.t() => 1..2}
+  def frequencies(hand), do: Enum.frequencies(hand)
+
   @spec candidate_cards(hand :: Hand.t(), led_suit :: Card.suit()) :: [Card.t()]
   defp candidate_cards(hand, led_suit) do
     hand
