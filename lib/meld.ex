@@ -4,7 +4,7 @@ defmodule Pinochle.Meld do
   @spec score(hand :: Hand, trump :: Card.suit()) :: non_neg_integer()
   def score(hand, trump) do
     card_frequencies = Hand.frequencies(hand)
-    score_nines(card_frequencies, trump) + score_marriages_non_trump(hand, trump) + score_marriages_of_trump(hand, trump)
+    score_nines(card_frequencies, trump) + score_marriages_non_trump(hand, trump) + score_marriages_of_trump(card_frequencies, trump)
   end
 
   defp score_marriages_non_trump(hand, trump), do: 2 * count_marriages_non_trump(hand, trump)
@@ -19,14 +19,14 @@ defmodule Pinochle.Meld do
     |> Enum.sum()
   end
 
-  defp score_marriages_of_trump(hand, trump), do: 4 * count_marriages_of_trump(hand, trump)
+  defp score_marriages_of_trump(card_frequencies, trump), do: 4 * count_marriages_of_trump(card_frequencies, trump)
 
-  defp count_marriages_of_trump(hand, trump) do
+  defp count_marriages_of_trump(card_frequencies, trump) do
     queen_of_trump = Card.new(:queen, trump)
     king_of_trump = Card.new(:king, trump)
 
-    queens = Enum.count(hand, fn card -> card == queen_of_trump end)
-    kings = Enum.count(hand, fn card -> card == king_of_trump end)
+    queens = Map.get(card_frequencies, queen_of_trump, 0)
+    kings = Map.get(card_frequencies, king_of_trump, 0)
 
     min(queens, kings)
   end
