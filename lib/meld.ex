@@ -22,17 +22,17 @@ defmodule Pinochle.Meld do
 
   defp non_trump_suits(trump), do: Card.suits() |> Enum.reject(&(&1 == trump))
 
+  @spec count_marriages_of_suit(card_frequencies :: %{Card.t() => 1..2}, suit :: Card.suit()) :: 0..2
+  defp count_marriages_of_suit(card_frequencies, suit) do
+    count_card_collection(card_frequencies, [Card.new(:queen, suit), Card.new(:king, suit)])
+  end
+
   @spec score_marriages_of_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..8
   defp score_marriages_of_trump(card_frequencies, trump), do: 4 * count_marriages_of_trump(card_frequencies, trump)
 
   @spec count_marriages_of_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
   defp count_marriages_of_trump(card_frequencies, trump) do
     count_marriages_of_suit(card_frequencies, trump)
-  end
-
-  @spec count_marriages_of_suit(card_frequencies :: %{Card.t() => 1..2}, suit :: Card.suit()) :: 0..2
-  defp count_marriages_of_suit(card_frequencies, suit) do
-    count_card_collection(card_frequencies, [Card.new(:queen, suit), Card.new(:king, suit)])
   end
 
   @spec count_card_collection(card_frequencies :: %{Card.t() => 1..2}, card_collection :: [Card.t()]) :: 0..2
