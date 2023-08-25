@@ -31,7 +31,7 @@ defmodule GameTest do
   end
 
   defp active_player_hand(game_pid) do
-    with {:ok, game} = Game.get(game_pid) do
+    with {:ok, game} <- Game.get(game_pid) do
       TrickTaking.current_hand(game.data)
     end
   end
