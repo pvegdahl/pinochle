@@ -69,7 +69,8 @@ defmodule Pinochle.Meld do
   defp score_aces_around(card_frequencies) do
     case count_aces_around(card_frequencies) do
       0 -> 0
-      _ -> 10
+      1 -> 10
+      2 -> 100
     end
   end
 
@@ -78,5 +79,4 @@ defmodule Pinochle.Meld do
     aces_spec = for suit <- Card.suits(), do: Card.new(:ace, suit)
     count_card_collection(card_frequencies, aces_spec)
   end
-
 end

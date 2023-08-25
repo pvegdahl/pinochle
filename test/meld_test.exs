@@ -102,11 +102,26 @@ defmodule MeldTest do
                Card.new(:ace, :clubs),
                Card.new(:ace, :diamonds),
                Card.new(:ace, :hearts),
-               Card.new(:ace, :spades),
+               Card.new(:ace, :spades)
              ],
              :clubs
            ) == 10
+  end
 
+  test "Double aces around is 100 points" do
+    assert Meld.score(
+             [
+               Card.new(:ace, :clubs),
+               Card.new(:ace, :clubs),
+               Card.new(:ace, :diamonds),
+               Card.new(:ace, :diamonds),
+               Card.new(:ace, :hearts),
+               Card.new(:ace, :hearts),
+               Card.new(:ace, :spades),
+               Card.new(:ace, :spades)
+             ],
+             :clubs
+           ) == 100
   end
 end
 
