@@ -96,32 +96,36 @@ defmodule MeldTest do
            ) == 30
   end
 
-  test "Aces around is 10 points" do
-    assert Meld.score(
-             [
-               Card.new(:ace, :clubs),
-               Card.new(:ace, :diamonds),
-               Card.new(:ace, :hearts),
-               Card.new(:ace, :spades)
-             ],
-             :clubs
-           ) == 10
+  for {rank, score} <- [{:ace, 10}, {:king, 8}, {:queen, 6}, {:jack, 4}] do
+    test "#{rank}s around is #{score} points" do
+      assert Meld.score(
+               [
+                 Card.new(unquote(rank), :clubs),
+                 Card.new(unquote(rank), :diamonds),
+                 Card.new(unquote(rank), :hearts),
+                 Card.new(unquote(rank), :spades)
+               ],
+               :clubs
+             ) == unquote(score)
+    end
   end
 
-  test "Double aces around is 100 points" do
-    assert Meld.score(
-             [
-               Card.new(:ace, :clubs),
-               Card.new(:ace, :clubs),
-               Card.new(:ace, :diamonds),
-               Card.new(:ace, :diamonds),
-               Card.new(:ace, :hearts),
-               Card.new(:ace, :hearts),
-               Card.new(:ace, :spades),
-               Card.new(:ace, :spades)
-             ],
-             :clubs
-           ) == 100
+  for {rank, score} <- [{:ace, 100}, {:king, 80}, {:queen, 60}, {:jack, 40}] do
+    test "Double #{rank}s around is #{score} points" do
+      assert Meld.score(
+               [
+                 Card.new(unquote(rank), :clubs),
+                 Card.new(unquote(rank), :clubs),
+                 Card.new(unquote(rank), :diamonds),
+                 Card.new(unquote(rank), :diamonds),
+                 Card.new(unquote(rank), :hearts),
+                 Card.new(unquote(rank), :hearts),
+                 Card.new(unquote(rank), :spades),
+                 Card.new(unquote(rank), :spades)
+               ],
+               :hearts
+             ) == unquote(score)
+    end
   end
 end
 
