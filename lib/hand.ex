@@ -1,4 +1,6 @@
 defmodule Pinochle.Hand do
+  @moduledoc false
+
   alias Pinochle.{Hand, Card}
 
   @type t :: [Card.t()]

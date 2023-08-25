@@ -1,4 +1,6 @@
 defmodule Pinochle.PlayerView do
+  @moduledoc false
+
   alias Pinochle.{PlayerView, Card, Game, Hand, Trick, TrickTaking}
 
   @enforce_keys [:game_state, :current_player, :hand, :trump, :hand_sizes]

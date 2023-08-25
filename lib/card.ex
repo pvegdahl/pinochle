@@ -1,4 +1,6 @@
 defmodule Pinochle.Card do
+  @moduledoc false
+
   alias Pinochle.Card
 
   @enforce_keys [:rank, :suit]

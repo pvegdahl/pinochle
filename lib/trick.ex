@@ -1,4 +1,6 @@
 defmodule Pinochle.Trick do
+  @moduledoc false
+
   alias Pinochle.{Trick, Card}
 
   @enforce_keys [:starting_player, :cards]

@@ -1,4 +1,6 @@
 defmodule Pinochle.TrickTakingTestHelpers do
+  @moduledoc false
+
   alias Pinochle.{Card, Trick, TrickTaking}
 
   @spec sorted_game(starting_player :: 0..3, trump :: Card.suit()) :: TrickTaking.t()

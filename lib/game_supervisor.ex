@@ -1,4 +1,6 @@
 defmodule Pinochle.GameSupervisor do
+  @moduledoc false
+
   use DynamicSupervisor
 
   alias Pinochle.Game

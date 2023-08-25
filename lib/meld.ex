@@ -1,4 +1,6 @@
 defmodule Pinochle.Meld do
+  @moduledoc false
+
   alias Pinochle.{Card, Hand}
 
   @spec score(hand :: Hand.t(), trump :: Card.suit()) :: non_neg_integer()
