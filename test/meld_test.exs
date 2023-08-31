@@ -158,9 +158,35 @@ defmodule MeldTest do
              :hearts
            ) == 150
   end
+
+  test "A run not in trump is worth 2 (for the marriage)" do
+    assert Meld.score(
+             [
+               Card.new(:ace, :clubs),
+               Card.new(:ten, :clubs),
+               Card.new(:king, :clubs),
+               Card.new(:queen, :clubs),
+               Card.new(:jack, :clubs)
+             ],
+             :diamonds
+           ) == 2
+  end
+
+  test "A run plus an extra marriage in trump is worth 19" do
+    assert Meld.score(
+             [
+               Card.new(:ace, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:jack, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts)
+             ],
+             :hearts
+           ) == 19
+  end
 end
 
 # TODO
-#   - Runs
-#     - Run + extra marriage
 #  - A hand with a bunch of different things mixed together
