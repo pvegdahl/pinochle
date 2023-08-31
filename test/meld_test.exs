@@ -186,7 +186,22 @@ defmodule MeldTest do
              :hearts
            ) == 19
   end
-end
 
-# TODO
-#  - A hand with a bunch of different things mixed together
+  test "A run (15) + queens around (6) + an extra marriage (2) + a pinochle (4) + a nine of trump (1) is 28" do
+    assert Meld.score(
+             [
+               Card.new(:ace, :diamonds),
+               Card.new(:ten, :diamonds),
+               Card.new(:king, :diamonds),
+               Card.new(:queen, :diamonds),
+               Card.new(:jack, :diamonds),
+               Card.new(:queen, :clubs),
+               Card.new(:queen, :hearts),
+               Card.new(:queen, :spades),
+               Card.new(:king, :hearts),
+               Card.new(:nine, :diamonds)
+             ],
+             :diamonds
+           ) == 28
+  end
+end
