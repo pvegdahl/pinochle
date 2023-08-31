@@ -14,7 +14,8 @@ defmodule Pinochle.Meld do
       score_rank_around(card_frequencies, :ace, 10) +
       score_rank_around(card_frequencies, :king, 8) +
       score_rank_around(card_frequencies, :queen, 6) +
-      score_rank_around(card_frequencies, :jack, 4)
+      score_rank_around(card_frequencies, :jack, 4) +
+      score_runs_in_trump(card_frequencies, trump)
   end
 
   @spec score_marriages_non_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..12
@@ -39,7 +40,7 @@ defmodule Pinochle.Meld do
 
   @spec count_marriages_of_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
   defp count_marriages_of_trump(card_frequencies, trump) do
-    count_marriages_of_suit(card_frequencies, trump)
+    count_marriages_of_suit(card_frequencies, trump) - count_runs_in_trump(card_frequencies, trump)
   end
 
   @spec count_card_collection(card_frequencies :: %{Card.t() => 1..2}, card_collection :: [Card.t()]) :: 0..2
@@ -85,5 +86,25 @@ defmodule Pinochle.Meld do
   defp count_rank_around(card_frequencies, rank) do
     aces_spec = for suit <- Card.suits(), do: Card.new(rank, suit)
     count_card_collection(card_frequencies, aces_spec)
+  end
+
+  @spec score_runs_in_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0 | 15 | 150
+  defp score_runs_in_trump(card_frequencies, trump) do
+    case count_runs_in_trump(card_frequencies, trump) do
+      0 -> 0
+      1 -> 15
+      2 -> 150
+    end
+  end
+
+  @spec count_runs_in_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
+  defp count_runs_in_trump(card_frequencies, trump) do
+    count_card_collection(card_frequencies, [
+      Card.new(:ace, trump),
+      Card.new(:ten, trump),
+      Card.new(:king, trump),
+      Card.new(:queen, trump),
+      Card.new(:jack, trump)
+    ])
   end
 end

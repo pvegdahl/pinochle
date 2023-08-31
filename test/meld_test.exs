@@ -127,8 +127,40 @@ defmodule MeldTest do
              ) == unquote(score)
     end
   end
+
+  test "A run in trump is worth 15" do
+    assert Meld.score(
+             [
+               Card.new(:ace, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:jack, :hearts)
+             ],
+             :hearts
+           ) == 15
+  end
+
+  test "A double run in trump is worth 150" do
+    assert Meld.score(
+             [
+               Card.new(:ace, :hearts),
+               Card.new(:ace, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:jack, :hearts),
+               Card.new(:jack, :hearts)
+             ],
+             :hearts
+           ) == 150
+  end
 end
 
 # TODO
 #   - Runs
 #     - Run + extra marriage
+#  - A hand with a bunch of different things mixed together
