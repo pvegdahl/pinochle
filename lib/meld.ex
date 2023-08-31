@@ -11,10 +11,10 @@ defmodule Pinochle.Meld do
       score_marriages_non_trump(card_frequencies, trump) +
       score_marriages_of_trump(card_frequencies, trump) +
       score_pinochle(card_frequencies) +
-      score_aces_around(card_frequencies) +
-      score_kings_around(card_frequencies) +
-      score_queens_around(card_frequencies) +
-      score_jacks_around(card_frequencies)
+      score_rank_around(card_frequencies, :ace, 10) +
+      score_rank_around(card_frequencies, :king, 8) +
+      score_rank_around(card_frequencies, :queen, 6) +
+      score_rank_around(card_frequencies, :jack, 4)
   end
 
   @spec score_marriages_non_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..12
@@ -68,44 +68,21 @@ defmodule Pinochle.Meld do
     count_card_collection(card_frequencies, [Card.new(:queen, :spades), Card.new(:jack, :diamonds)])
   end
 
-  @spec score_aces_around(card_frequencies :: %{Card.t() => 1..2}) :: 0 | 10 | 100
-  defp score_aces_around(card_frequencies) do
-    case count_something_around(card_frequencies, :ace) do
+  @spec score_rank_around(
+          card_frequencies :: %{Card.t() => 1..2},
+          rank :: Card.rank(),
+          base_score :: pos_integer()
+        ) :: non_neg_integer()
+  defp score_rank_around(card_frequencies, rank, base_score) do
+    case count_rank_around(card_frequencies, rank) do
       0 -> 0
-      1 -> 10
-      2 -> 100
+      1 -> base_score
+      2 -> 10 * base_score
     end
   end
 
-  @spec score_kings_around(card_frequencies :: %{Card.t() => 1..2}) :: 0 | 8 | 80
-  defp score_kings_around(card_frequencies) do
-    case count_something_around(card_frequencies, :king) do
-      0 -> 0
-      1 -> 8
-      2 -> 80
-    end
-  end
-
-  @spec score_queens_around(card_frequencies :: %{Card.t() => 1..2}) :: 0 | 6 | 60
-  defp score_queens_around(card_frequencies) do
-    case count_something_around(card_frequencies, :queen) do
-      0 -> 0
-      1 -> 6
-      2 -> 60
-    end
-  end
-
-  @spec score_jacks_around(card_frequencies :: %{Card.t() => 1..2}) :: 0 | 4 | 40
-  defp score_jacks_around(card_frequencies) do
-    case count_something_around(card_frequencies, :jack) do
-      0 -> 0
-      1 -> 4
-      2 -> 40
-    end
-  end
-
-  @spec count_something_around(card_frequencies :: %{Card.t() => 1..2}, rank :: Card.rank()) :: 0..2
-  defp count_something_around(card_frequencies, rank) do
+  @spec count_rank_around(card_frequencies :: %{Card.t() => 1..2}, rank :: Card.rank()) :: 0..2
+  defp count_rank_around(card_frequencies, rank) do
     aces_spec = for suit <- Card.suits(), do: Card.new(rank, suit)
     count_card_collection(card_frequencies, aces_spec)
   end
