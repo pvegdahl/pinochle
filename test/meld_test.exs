@@ -246,4 +246,38 @@ defmodule MeldTest do
            ) ==
              %{Card.new(:nine, :spades) => 2}
   end
+
+  test "Show meld of a marriage" do
+    assert Meld.show(
+             [
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts)
+             ],
+             :spades
+           ) ==
+             %{
+               Card.new(:king, :hearts) => 1,
+               Card.new(:queen, :hearts) => 1
+             }
+  end
+
+  test "Show meld of multiple non-trump marriages" do
+    assert Meld.show(
+             [
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:king, :diamonds),
+               Card.new(:queen, :diamonds)
+             ],
+             :spades
+           ) ==
+             %{
+               Card.new(:king, :hearts) => 2,
+               Card.new(:queen, :hearts) => 2,
+               Card.new(:king, :diamonds) => 1,
+               Card.new(:queen, :diamonds) => 1
+             }
+  end
 end
