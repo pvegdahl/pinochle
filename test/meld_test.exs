@@ -280,4 +280,36 @@ defmodule MeldTest do
                Card.new(:queen, :diamonds) => 1
              }
   end
+
+  test "Show meld of a pinochle" do
+    assert Meld.show(
+             [
+               Card.new(:queen, :spades),
+               Card.new(:jack, :diamonds),
+               Card.new(:ten, :diamonds)
+             ],
+             :spades
+           ) ==
+             %{
+               Card.new(:jack, :diamonds) => 1,
+               Card.new(:queen, :spades) => 1
+             }
+  end
+
+  test "Show meld of a double pinochle" do
+    assert Meld.show(
+             [
+               Card.new(:queen, :spades),
+               Card.new(:queen, :spades),
+               Card.new(:jack, :diamonds),
+               Card.new(:jack, :diamonds),
+               Card.new(:ace, :spades)
+             ],
+             :spades
+           ) ==
+             %{
+               Card.new(:jack, :diamonds) => 2,
+               Card.new(:queen, :spades) => 2
+             }
+  end
 end

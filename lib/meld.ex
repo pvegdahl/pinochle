@@ -24,8 +24,10 @@ defmodule Pinochle.Meld do
 
     nines = show_nines_of_trump(card_frequencies, trump)
     non_trump_marriages = show_marriages_non_trump(card_frequencies, trump)
+    pinochle = show_pinochle(card_frequencies)
 
     Map.merge(nines, non_trump_marriages)
+    |> Map.merge(pinochle)
     |> reject_cards_with_zeroes()
   end
 
@@ -100,6 +102,16 @@ defmodule Pinochle.Meld do
   @spec count_pinochle(card_frequencies :: %{Card.t() => 1..2}) :: 0..2
   defp count_pinochle(card_frequencies) do
     count_card_collection(card_frequencies, [Card.new(:queen, :spades), Card.new(:jack, :diamonds)])
+  end
+
+  @spec show_pinochle(card_frequencies :: %{Card.t() => 1..2}) :: %{Card.t() => 0..2}
+  defp show_pinochle(card_frequencies) do
+    count = count_pinochle(card_frequencies)
+
+    %{
+      Card.new(:jack, :diamonds) => count,
+      Card.new(:queen, :spades) => count
+    }
   end
 
   @spec score_rank_around(
