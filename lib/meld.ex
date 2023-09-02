@@ -26,9 +26,13 @@ defmodule Pinochle.Meld do
     non_trump_marriages = show_marriages_non_trump(card_frequencies, trump)
     pinochle = show_pinochle(card_frequencies)
 
-    Map.merge(nines, non_trump_marriages)
-    |> Map.merge(pinochle)
+    merge_max_card_count(nines, non_trump_marriages)
+    |> merge_max_card_count(pinochle)
     |> reject_cards_with_zeroes()
+  end
+
+  defp merge_max_card_count(card_frequencies1, card_frequencies2) do
+    Map.merge(card_frequencies1, card_frequencies2, fn _key, value1, value2 -> max(value1, value2) end)
   end
 
   defp reject_cards_with_zeroes(card_frequencies) do

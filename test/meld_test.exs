@@ -312,4 +312,22 @@ defmodule MeldTest do
                Card.new(:queen, :spades) => 2
              }
   end
+
+  test "Show meld with overlapping double marriage and single pinochle" do
+    assert Meld.show(
+             [
+               Card.new(:king, :spades),
+               Card.new(:king, :spades),
+               Card.new(:queen, :spades),
+               Card.new(:queen, :spades),
+               Card.new(:jack, :diamonds),
+             ],
+             :clubs
+           ) ==
+             %{
+               Card.new(:king, :spades) => 2,
+               Card.new(:queen, :spades) => 2,
+               Card.new(:jack, :diamonds) => 1,
+             }
+  end
 end
