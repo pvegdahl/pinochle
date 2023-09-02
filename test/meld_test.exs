@@ -204,4 +204,16 @@ defmodule MeldTest do
              :diamonds
            ) == 28
   end
+
+  test "Show meld of nines of trump" do
+    assert Meld.show(
+             [
+               Card.new(:nine, :diamonds),
+               Card.new(:king, :diamonds),
+               Card.new(:nine, :spades)
+             ],
+             :diamonds
+           ) ==
+             %{Card.new(:nine, :diamonds) => 1}
+  end
 end

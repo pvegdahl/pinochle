@@ -7,7 +7,7 @@ defmodule Pinochle.Meld do
   def score(hand, trump) do
     card_frequencies = Hand.frequencies(hand)
 
-    score_nines(card_frequencies, trump) +
+    score_nines_of_trump(card_frequencies, trump) +
       score_marriages_non_trump(card_frequencies, trump) +
       score_marriages_of_trump(card_frequencies, trump) +
       score_pinochle(card_frequencies) +
@@ -16,6 +16,15 @@ defmodule Pinochle.Meld do
       score_rank_around(card_frequencies, :queen, 6) +
       score_rank_around(card_frequencies, :jack, 4) +
       score_runs_in_trump(card_frequencies, trump)
+  end
+
+  @spec show(hand :: Hand.t(), trump :: Card.suit()) :: %{Card.t() => 1..2}
+  def show(hand, trump) do
+    card_frequencies = Hand.frequencies(hand)
+
+    case count_nines_of_trump(card_frequencies, trump) do
+      1 -> %{Card.new(:nine, trump) => 1}
+    end
   end
 
   @spec score_marriages_non_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..12
@@ -50,8 +59,13 @@ defmodule Pinochle.Meld do
     |> Enum.min()
   end
 
-  @spec score_nines(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
-  defp score_nines(card_frequencies, trump) do
+  @spec score_nines_of_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
+  defp score_nines_of_trump(card_frequencies, trump) do
+    count_nines_of_trump(card_frequencies, trump)
+  end
+
+  @spec count_nines_of_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..2
+  defp count_nines_of_trump(card_frequencies, trump) do
     Map.get(card_frequencies, Card.new(:nine, trump), 0)
   end
 
