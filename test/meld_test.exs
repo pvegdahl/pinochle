@@ -205,7 +205,24 @@ defmodule MeldTest do
            ) == 28
   end
 
-  test "Show meld of nines of trump" do
+  test "Show no meld" do
+    assert Meld.show(
+             [
+               Card.new(:nine, :diamonds),
+               Card.new(:king, :diamonds),
+               Card.new(:king, :spades),
+               Card.new(:king, :clubs),
+               Card.new(:jack, :clubs),
+               Card.new(:ace, :clubs),
+               Card.new(:ten, :clubs),
+               Card.new(:nine, :spades)
+             ],
+             :clubs
+           ) ==
+             Map.new()
+  end
+
+  test "Show meld of one nine of trump" do
     assert Meld.show(
              [
                Card.new(:nine, :diamonds),
@@ -215,5 +232,18 @@ defmodule MeldTest do
              :diamonds
            ) ==
              %{Card.new(:nine, :diamonds) => 1}
+  end
+
+  test "Show meld of two nines of trump" do
+    assert Meld.show(
+             [
+               Card.new(:nine, :diamonds),
+               Card.new(:king, :diamonds),
+               Card.new(:nine, :spades),
+               Card.new(:nine, :spades)
+             ],
+             :spades
+           ) ==
+             %{Card.new(:nine, :spades) => 2}
   end
 end

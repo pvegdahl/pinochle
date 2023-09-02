@@ -22,9 +22,8 @@ defmodule Pinochle.Meld do
   def show(hand, trump) do
     card_frequencies = Hand.frequencies(hand)
 
-    case count_nines_of_trump(card_frequencies, trump) do
-      1 -> %{Card.new(:nine, trump) => 1}
-    end
+    %{Card.new(:nine, trump) => count_nines_of_trump(card_frequencies, trump)}
+    |> Map.reject(fn {_key, value} -> value == 0 end)
   end
 
   @spec score_marriages_non_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: 0..12
