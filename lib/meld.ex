@@ -22,22 +22,19 @@ defmodule Pinochle.Meld do
   def show(hand, trump) do
     card_frequencies = Hand.frequencies(hand)
 
-    nines = show_nines_of_trump(card_frequencies, trump)
-    marriages = show_marriages(card_frequencies)
-    runs_in_trump = show_runs_in_trump(card_frequencies, trump)
-    pinochle = show_pinochle(card_frequencies)
-    aces_around = show_rank_around(card_frequencies, :ace)
-    kings_around = show_rank_around(card_frequencies, :king)
-    queens_around = show_rank_around(card_frequencies, :queen)
-    jacks_around = show_rank_around(card_frequencies, :jack)
-
-    merge_max_card_count(nines, marriages)
-    |> merge_max_card_count(pinochle)
-    |> merge_max_card_count(runs_in_trump)
-    |> merge_max_card_count(aces_around)
-    |> merge_max_card_count(kings_around)
-    |> merge_max_card_count(queens_around)
-    |> merge_max_card_count(jacks_around)
+    Enum.reduce(
+      [
+        show_nines_of_trump(card_frequencies, trump),
+        show_marriages(card_frequencies),
+        show_runs_in_trump(card_frequencies, trump),
+        show_pinochle(card_frequencies),
+        show_rank_around(card_frequencies, :ace),
+        show_rank_around(card_frequencies, :king),
+        show_rank_around(card_frequencies, :queen),
+        show_rank_around(card_frequencies, :jack)
+      ],
+      &merge_max_card_count/2
+    )
     |> reject_cards_with_zeroes()
   end
 
