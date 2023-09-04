@@ -1,21 +1,16 @@
 # Pinochle
 
-**TODO: Add description**
+A webserver implementation of the card game [Pinochle](https://en.wikipedia.org/wiki/Pinochle) in Elixir.  There are
+many variations of this game.  I'm implementing the rules used by my family.
 
-## Installation
+I created this project as a forcing function to extend my knowledge and experience of the Elixir ecosystem:
+- GenServers
+- (Dynamic) Supervisors
+- Phoenix
+- LiveView
+- Deployments (maybe)
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `pinochle` to your list of dependencies in `mix.exs`:
+I'm not planning to add a database.  In memory data is fine for this context.
 
-```elixir
-def deps do
-  [
-    {:pinochle, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/pinochle](https://hexdocs.pm/pinochle).
-
+I don't expect this to receive any widespread usage.  If you want to play Pinochle online, there are plenty of existing
+websites.
