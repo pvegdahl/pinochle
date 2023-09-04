@@ -23,11 +23,13 @@ defmodule Pinochle.Meld do
     card_frequencies = Hand.frequencies(hand)
 
     nines = show_nines_of_trump(card_frequencies, trump)
-    non_trump_marriages = show_marriages_non_trump(card_frequencies, trump)
+    marriages = show_marriages(card_frequencies)
+    runs_in_trump = show_runs_in_trump(card_frequencies, trump)
     pinochle = show_pinochle(card_frequencies)
 
-    merge_max_card_count(nines, non_trump_marriages)
+    merge_max_card_count(nines, marriages)
     |> merge_max_card_count(pinochle)
+    |> merge_max_card_count(runs_in_trump)
     |> reject_cards_with_zeroes()
   end
 
@@ -49,9 +51,9 @@ defmodule Pinochle.Meld do
     |> Enum.sum()
   end
 
-  @spec show_marriages_non_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: %{Card.t() => 0..2}
-  defp show_marriages_non_trump(card_frequencies, trump) do
-    non_trump_suits(trump)
+  @spec show_marriages(card_frequencies :: %{Card.t() => 1..2}) :: %{Card.t() => 0..2}
+  defp show_marriages(card_frequencies) do
+    Card.suits()
     |> Enum.map(fn suit -> {suit, count_marriages_of_suit(card_frequencies, suit)} end)
     |> Enum.flat_map(fn {suit, count} -> [{Card.new(:king, suit), count}, {Card.new(:queen, suit), count}] end)
     |> Enum.into(Map.new())
@@ -155,5 +157,18 @@ defmodule Pinochle.Meld do
       Card.new(:queen, trump),
       Card.new(:jack, trump)
     ])
+  end
+
+  @spec show_runs_in_trump(card_frequencies :: %{Card.t() => 1..2}, trump :: Card.suit()) :: %{Card.t() => 0..2}
+  defp show_runs_in_trump(card_frequencies, trump) do
+    count = count_runs_in_trump(card_frequencies, trump)
+
+    %{
+      Card.new(:ace, trump) => count,
+      Card.new(:ten, trump) => count,
+      Card.new(:king, trump) => count,
+      Card.new(:queen, trump) => count,
+      Card.new(:jack, trump) => count
+    }
   end
 end

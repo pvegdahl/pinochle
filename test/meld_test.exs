@@ -320,14 +320,73 @@ defmodule MeldTest do
                Card.new(:king, :spades),
                Card.new(:queen, :spades),
                Card.new(:queen, :spades),
-               Card.new(:jack, :diamonds),
+               Card.new(:jack, :diamonds)
              ],
              :clubs
            ) ==
              %{
                Card.new(:king, :spades) => 2,
                Card.new(:queen, :spades) => 2,
-               Card.new(:jack, :diamonds) => 1,
+               Card.new(:jack, :diamonds) => 1
+             }
+  end
+
+  test "Show meld of a trump marriage" do
+    assert Meld.show(
+             [
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts)
+             ],
+             :hearts
+           ) ==
+             %{
+               Card.new(:king, :hearts) => 1,
+               Card.new(:queen, :hearts) => 1
+             }
+  end
+
+  test "Show meld of a run in trump" do
+    assert Meld.show(
+             [
+               Card.new(:ace, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:jack, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:jack, :hearts),
+               Card.new(:queen, :spades)
+             ],
+             :hearts
+           ) ==
+             %{
+               Card.new(:ace, :hearts) => 1,
+               Card.new(:ten, :hearts) => 1,
+               Card.new(:king, :hearts) => 1,
+               Card.new(:queen, :hearts) => 1,
+               Card.new(:jack, :hearts) => 1
+             }
+  end
+
+  test "Show meld of a run in trump plus an extra trump marriage" do
+    assert Meld.show(
+             [
+               Card.new(:ace, :spades),
+               Card.new(:ten, :spades),
+               Card.new(:king, :spades),
+               Card.new(:queen, :spades),
+               Card.new(:jack, :spades),
+               Card.new(:king, :spades),
+               Card.new(:queen, :spades)
+             ],
+             :spades
+           ) ==
+             %{
+               Card.new(:ace, :spades) => 1,
+               Card.new(:ten, :spades) => 1,
+               Card.new(:king, :spades) => 2,
+               Card.new(:queen, :spades) => 2,
+               Card.new(:jack, :spades) => 1
              }
   end
 end
