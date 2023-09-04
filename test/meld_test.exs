@@ -389,4 +389,103 @@ defmodule MeldTest do
                Card.new(:jack, :spades) => 1
              }
   end
+
+  test "Show a double run in trump" do
+    assert Meld.show(
+             [
+               Card.new(:ace, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:jack, :hearts),
+               Card.new(:ace, :hearts),
+               Card.new(:ten, :hearts),
+               Card.new(:king, :hearts),
+               Card.new(:queen, :hearts),
+               Card.new(:jack, :hearts)
+             ],
+             :hearts
+           ) ==
+             %{
+               Card.new(:ace, :hearts) => 2,
+               Card.new(:ten, :hearts) => 2,
+               Card.new(:king, :hearts) => 2,
+               Card.new(:queen, :hearts) => 2,
+               Card.new(:jack, :hearts) => 2
+             }
+  end
+
+  for rank <- [:ace, :king, :queen, :jack] do
+    test "Show #{rank} around" do
+      assert Meld.show(
+               [
+                 Card.new(unquote(rank), :clubs),
+                 Card.new(unquote(rank), :diamonds),
+                 Card.new(unquote(rank), :hearts),
+                 Card.new(unquote(rank), :spades)
+               ],
+               :clubs
+             ) == %{
+               Card.new(unquote(rank), :clubs) => 1,
+               Card.new(unquote(rank), :diamonds) => 1,
+               Card.new(unquote(rank), :hearts) => 1,
+               Card.new(unquote(rank), :spades) => 1
+             }
+    end
+  end
+
+  for rank <- [:ace, :king, :queen, :jack] do
+    test "Show double #{rank} around" do
+      assert Meld.show(
+               [
+                 Card.new(unquote(rank), :clubs),
+                 Card.new(unquote(rank), :clubs),
+                 Card.new(unquote(rank), :diamonds),
+                 Card.new(unquote(rank), :diamonds),
+                 Card.new(unquote(rank), :hearts),
+                 Card.new(unquote(rank), :hearts),
+                 Card.new(unquote(rank), :spades),
+                 Card.new(unquote(rank), :spades)
+               ],
+               :clubs
+             ) == %{
+               Card.new(unquote(rank), :clubs) => 2,
+               Card.new(unquote(rank), :diamonds) => 2,
+               Card.new(unquote(rank), :hearts) => 2,
+               Card.new(unquote(rank), :spades) => 2
+             }
+    end
+  end
+
+  test "Show a mix of cards:  run + queens around + an extra marriage + a pinochle + a nine of trump" do
+    assert Meld.show(
+             [
+               Card.new(:ace, :diamonds),
+               Card.new(:ten, :diamonds),
+               Card.new(:king, :diamonds),
+               Card.new(:queen, :diamonds),
+               Card.new(:jack, :diamonds),
+               Card.new(:queen, :clubs),
+               Card.new(:queen, :hearts),
+               Card.new(:queen, :spades),
+               Card.new(:queen, :spades),
+               Card.new(:king, :hearts),
+               Card.new(:nine, :diamonds),
+               Card.new(:jack, :clubs)
+             ],
+             :diamonds
+           ) == %{
+             Card.new(:ace, :diamonds) => 1,
+             Card.new(:ten, :diamonds) => 1,
+             Card.new(:king, :diamonds) => 1,
+             Card.new(:queen, :diamonds) => 1,
+             Card.new(:jack, :diamonds) => 1,
+             Card.new(:queen, :clubs) => 1,
+             Card.new(:queen, :hearts) => 1,
+             Card.new(:queen, :spades) => 1,
+             Card.new(:queen, :spades) => 1,
+             Card.new(:king, :hearts) => 1,
+             Card.new(:nine, :diamonds) => 1
+           }
+  end
 end
